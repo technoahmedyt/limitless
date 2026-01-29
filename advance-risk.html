@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Stock Risk Calculator</title>
+
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0f172a, #334155);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            color: #f1f5f9;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #60a5fa;
+            letter-spacing: 0.05em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .section {
+            margin: 2rem 0;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #a5b4fc;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0f2fe;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+        }
+
+        .card input::placeholder {
+            color: #94a3b8;
+            opacity: 0.8;
+        }
+
+        .output {
+            margin-top: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #34d399;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .output.flash {
+            transform: scale(1.1);
+            color: #facc15;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                font-size: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.25rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            header {
+                font-size: 1.75rem;
+            }
+
+            .card input {
+                font-size: 0.9rem;
+            }
+
+            .output {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <header>⚡ Advanced Stock Risk Calculator ⚡</header>
+
+        <!-- Input Section -->
+        <div class="section">
+            <h2>Inputs</h2>
+            <div class="grid">
+                <div class="card">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" placeholder="Enter amount">
+                </div>
+                <div class="card">
+                    <label for="entry">Entry</label>
+                    <input type="number" id="entry" placeholder="Enter entry price">
+                </div>
+                <div class="card">
+                    <label for="sl">Stop Loss (SL)</label>
+                    <input type="number" id="sl" placeholder="Enter stop loss">
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="section">
+            <h2>Results</h2>
+            <div class="grid">
+                <div class="card"><label>Difference</label>
+                    <div class="output" id="difference">-</div>
+                </div>
+                <div class="card"><label>Quantity</label>
+                    <div class="output" id="quantity">-</div>
+                </div>
+                <div class="card"><label>Capital Need</label>
+                    <div class="output" id="capital">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target Per Quantity -->
+        <div class="section">
+            <h2>Target Per Quantity</h2>
+            <div class="grid">
+                <div class="card"><label>Target 1:1</label>
+                    <div class="output" id="target11">-</div>
+                </div>
+                <div class="card"><label>Target 1:2</label>
+                    <div class="output" id="target12">-</div>
+                </div>
+                <div class="card"><label>Target 1:3</label>
+                    <div class="output" id="target13">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Targets -->
+        <div class="section">
+            <h2>Price Targets</h2>
+            <div class="grid">
+                <div class="card"><label>Price Target 1:1</label>
+                    <div class="output" id="price11">-</div>
+                </div>
+                <div class="card"><label>Price Target 1:2</label>
+                    <div class="output" id="price12">-</div>
+                </div>
+                <div class="card"><label>Price Target 1:3</label>
+                    <div class="output" id="price13">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit Amount -->
+        <div class="section">
+            <h2>Profit Amount</h2>
+            <div class="grid">
+                <div class="card"><label>Profit 1:1</label>
+                    <div class="output" id="profit11">-</div>
+                </div>
+                <div class="card"><label>Profit 1:2</label>
+                    <div class="output" id="profit12">-</div>
+                </div>
+                <div class="card"><label>Profit 1:3</label>
+                    <div class="output" id="profit13">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll("#amount, #entry, #sl");
+
+        function flashOutput(el, value) {
+            el.innerText = value;
+            el.classList.add("flash");
+            setTimeout(() => el.classList.remove("flash"), 300);
+        }
+
+        function calculate() {
+            let amount = parseFloat(document.getElementById("amount").value);
+            let entry = parseFloat(document.getElementById("entry").value);
+            let sl = parseFloat(document.getElementById("sl").value);
+
+            if (isNaN(amount) || isNaN(entry) || isNaN(sl) || entry <= sl) {
+                return;
+            }
+
+            let difference = entry - sl;
+            flashOutput(document.getElementById("difference"), difference.toFixed(2));
+
+            let quantity = amount / difference;
+            flashOutput(document.getElementById("quantity"), Math.floor(quantity));
+
+            let capital = entry * quantity;
+            flashOutput(document.getElementById("capital"), capital.toFixed(2));
+
+            let target11 = difference * 1;
+            let target12 = difference * 2;
+            let target13 = difference * 3;
+            flashOutput(document.getElementById("target11"), target11.toFixed(2));
+            flashOutput(document.getElementById("target12"), target12.toFixed(2));
+            flashOutput(document.getElementById("target13"), target13.toFixed(2));
+
+            let price11 = entry + target11;
+            let price12 = entry + target12;
+            let price13 = entry + target13;
+            flashOutput(document.getElementById("price11"), price11.toFixed(2));
+            flashOutput(document.getElementById("price12"), price12.toFixed(2));
+            flashOutput(document.getElementById("price13"), price13.toFixed(2));
+
+            let profit11 = target11 * quantity;
+            let profit12 = target12 * quantity;
+            let profit13 = target13 * quantity;
+            flashOutput(document.getElementById("profit11"), profit11.toFixed(2));
+            flashOutput(document.getElementById("profit12"), profit12.toFixed(2));
+            flashOutput(document.getElementById("profit13"), profit13.toFixed(2));
+        }
+
+        inputs.forEach(input => input.addEventListener("input", calculate));
+    </script>
+
+</body>
+
+</html>
