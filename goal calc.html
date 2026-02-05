@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savings Goal Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .app {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 32px;
+    color: #2563eb;
+    font-weight: 700;
+  }
+  h2 {
+    text-align: center;
+    color: #1e293b;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+  .create-goal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @media (min-width: 640px) {
+    .create-goal-form {
+      flex-direction: row;
+      align-items: end;
+    }
+    .create-goal-form > * { flex: 1; }
+    .create-goal-form button { flex: 0 0 200px; }
+  }
+  input {
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+    font-size: 17px;
+    transition: all 0.2s;
+  }
+  input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 5px rgba(37,99,235,0.15);
+  }
+  button {
+    padding: 16px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button:hover { background: #1d4ed8; }
+  button.secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+  button.secondary:hover { background: #cbd5e1; }
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  @media (min-width: 768px) {
+    .dashboard { flex-direction: row; }
+    .dashboard > .card:first-child { flex: 1; }
+    .dashboard > .card:last-child { flex: 2; }
+  }
+  .goal-item {
+    background: #f1f5f9;
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid #e2e8f0;
+  }
+  .goal-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+  .goal-item strong {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .no-goals {
+    text-align: center;
+    color: #64748b;
+    padding: 80px 20px;
+    font-size: 18px;
+  }
+  .no-goals strong {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  .chart-container {
+    position: relative;
+    height: 380px;
+    margin: 40px 0;
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 20px;
+  }
+  @media (max-width: 768px) {
+    .chart-container { height: 300px; }
+  }
+  .custom-add-section {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .custom-amount-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 40px 0;
+  }
+  .custom-amount-wrapper::before {
+    content: "🧮";
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #custom-amount {
+    font-size: 48px;
+    padding: 24px 24px 24px 80px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 24px;
+  }
+  @media (max-width: 640px) {
+    #custom-amount {
+      font-size: 36px;
+      padding: 20px 20px 20px 70px;
+    }
+    .custom-amount-wrapper::before { font-size: 32px; left: 20px; }
+  }
+  .custom-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 20px;
+  }
+  @media (max-width: 480px) {
+    .custom-buttons {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .custom-buttons button {
+      padding: 18px;
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>💰 Savings Goal Tracker</h1>
+
+  <div class="card">
+    <h2>Create New Goal</h2>
+    <div class="create-goal-form">
+      <input id="goal-name" placeholder="Goal name (e.g. Vacation Fund)">
+      <input id="goal-amount" type="number" step="0.01" min="0.01" placeholder="Target amount (₹)">
+      <input id="goal-date" type="date">
+      <button onclick="addGoal()">Create Goal</button>
+    </div>
+  </div>
+
+  <div class="dashboard">
+    <div class="card">
+      <h2>My Goals</h2>
+      <div id="goal-list"></div>
+    </div>
+
+    <div class="card" id="goal-details">
+      <div class="no-goals">
+        Select a goal from the list to view details and add savings.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let goals = JSON.parse(localStorage.getItem('savings_goals') || '[]');
+let activeGoal = null;
+let progressChart = null;
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function showNotification(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/favicon.ico' }); // optional icon
+  }
+}
+
+function saveGoals() {
+  localStorage.setItem('savings_goals', JSON.stringify(goals));
+}
+
+function calculateSaved(goal) {
+  return Object.values(goal.days || {}).reduce((sum, day) => day.checked ? sum + parseFloat(day.amount || 0) : sum, 0);
+}
+
+function addGoal() {
+  requestNotificationPermission();
+
+  const name = document.getElementById('goal-name').value.trim();
+  const amountStr = document.getElementById('goal-amount').value;
+  const targetDate = document.getElementById('goal-date').value;
+
+  if (!name || !amountStr || !targetDate) {
+    alert('Please fill all fields.');
+    return;
+  }
+
+  const amount = parseFloat(amountStr);
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid target amount.');
+    return;
+  }
+
+  const today = new Date();
+  const target = new Date(targetDate);
+  if (target < today) {
+    alert('Target date must be today or in the future.');
+    return;
+  }
+
+  const totalDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24)) + 1;
+  const dailyTarget = amount / totalDays;
+
+  const newGoal = {
+    id: Date.now(),
+    name,
+    targetAmount: amount,
+    targetDate,
+    startDate: today.toISOString().slice(0, 10),
+    dailyTarget: dailyTarget.toFixed(2),
+    days: {}
+  };
+
+  goals.push(newGoal);
+  saveGoals();
+  renderGoalList();
+
+  showNotification('New Goal Created!', `${name} - Target ₹${amount.toFixed(2)} by ${targetDate}`);
+
+  document.getElementById('goal-name').value = '';
+  document.getElementById('goal-amount').value = '';
+  document.getElementById('goal-date').value = '';
+}
+
+function renderGoalList() {
+  const list = document.getElementById('goal-list');
+  list.innerHTML = '';
+
+  if (goals.length === 0) {
+    list.innerHTML = '<div class="no-goals">No goals yet.<br>Create your first savings goal above!</div>';
+    return;
+  }
+
+  goals.forEach(goal => {
+    const saved = calculateSaved(goal);
+    const progress = goal.targetAmount ? (saved / goal.targetAmount * 100).toFixed(0) : 0;
+
+    const item = document.createElement('div');
+    item.className = 'goal-item';
+    item.innerHTML = `
+      <strong>${goal.name}</strong><br>
+      ₹${saved.toFixed(2)} saved of ₹${goal.targetAmount.toFixed(2)} (${progress}%)<br>
+      <small>Target: ${goal.targetDate}</small>
+    `;
+    item.onclick = () => selectGoal(goal);
+    list.appendChild(item);
+  });
+}
+
+function selectGoal(goal) {
+  activeGoal = goal;
+  renderGoalDetails();
+}
+
+function addCustomSavings() {
+  requestNotificationPermission();
+
+  const amountStr = document.getElementById('custom-amount').value.trim();
+  const amount = parseFloat(amountStr);
+
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid positive amount.');
+    return;
+  }
+
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const day = activeGoal.days[todayKey] || { amount: 0, checked: false };
+  day.amount += amount;
+  day.checked = true;
+  activeGoal.days[todayKey] = day;
+
+  saveGoals();
+  document.getElementById('custom-amount').value = '';
+
+  const newSaved = calculateSaved(activeGoal);
+  renderGoalDetails();
+  renderGoalList();
+
+  showNotification('Savings Added!', `₹${amount.toFixed(2)} saved today for ${activeGoal.name}`);
+
+  if (newSaved >= activeGoal.targetAmount) {
+    showNotification('🎉 Goal Achieved!', `${activeGoal.name} completed!`);
+  }
+}
+
+function renderGoalDetails() {
+  if (!activeGoal) return;
+
+  const goal = activeGoal;
+  const saved = calculateSaved(goal);
+  const progress = (saved / goal.targetAmount * 100).toFixed(1);
+  const remaining = Math.max(0, goal.targetAmount - saved);
+
+  const start = new Date(goal.startDate);
+  const target = new Date(goal.targetDate);
+
+  const labels = [];
+  const actualData = [];
+  const targetData = [];
+  let cumulative = 0;
+  let dayIndex = 0;
+
+  for (let d = new Date(start); d <= target; d.setDate(d.getDate() + 1)) {
+    dayIndex++;
+    const key = d.toISOString().slice(0, 10);
+    labels.push(d.getDate() + '/' + (d.getMonth() + 1));
+
+    const day = goal.days[key] || { amount: 0, checked: false };
+    if (day.checked) {
+      cumulative += parseFloat(day.amount || 0);
+    }
+
+    actualData.push(cumulative.toFixed(2));
+    targetData.push((dayIndex * parseFloat(goal.dailyTarget)).toFixed(2));
+  }
+
+  document.getElementById('goal-details').innerHTML = `
+    <h2>${goal.name}</h2>
+    <p><strong>Target Amount:</strong> ₹${goal.targetAmount.toFixed(2)} by ${goal.targetDate}</p>
+    <p><strong>Started:</strong> ${goal.startDate}</p>
+    <p><strong>Daily Suggestion:</strong> ₹${goal.dailyTarget}</p>
+    <p><strong>Saved:</strong> ₹${saved.toFixed(2)} (${progress}%)</p>
+    <p><strong>Remaining:</strong> ₹${remaining.toFixed(2)}</p>
+
+    <div class="chart-container">
+      <canvas id="progress-chart"></canvas>
+    </div>
+
+    <div class="custom-add-section">
+      <h3>Custom Amount Contribution</h3>
+      <p style="color:#64748b; margin:16px 0;">Enter the amount you saved today</p>
+      <div class="custom-amount-wrapper">
+        <input type="number" id="custom-amount" step="0.01" min="0" placeholder="0.00">
+      </div>
+      <div class="custom-buttons">
+        <button class="secondary" onclick="document.getElementById('custom-amount').value = ''">Clear</button>
+        <button onclick="addCustomSavings()">Save</button>
+      </div>
+    </div>
+  `;
+
+  if (progressChart) progressChart.destroy();
+
+  const ctx = document.getElementById('progress-chart');
+  progressChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Actual Saved (₹)',
+          data: actualData,
+          borderColor: '#22c55e',
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          fill: true,
+          tension: 0.4
+        },
+        {
+          label: 'Suggested Pace (₹)',
+          data: targetData,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          fill: true,
+          borderDash: [8, 4],
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: 'Amount (₹)' } },
+        x: { title: { display: true, text: 'Day/Month' } }
+      }
+    }
+  });
+}
+
+renderGoalList();
+</script>
+</body>
+</html>
