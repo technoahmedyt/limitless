@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Investment Calculator</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+  
+  body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #fff;
+}
+
+/* HEADER */
+.site-header {
+  padding: 20px;
+  text-align: center;
+  background: #020617;
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* CONTENT */
+.content {
+  flex: 3;
+}
+
+/* SIDEBAR */
+.sidebar {
+  flex: 1;
+  margin-left: 20px;
+}
+
+/* TOOLS GRID */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.tools-grid a {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #38bdf8;
+  text-align: center;
+}
+
+/* ADS */
+.ad {
+  background: #111827;
+  border: 1px dashed #475569;
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.ad-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+/* FOOTER */
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  background: #020617;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    display: none; /* Sidebar ads hidden on mobile */
+  }
+}
+
+  
+  
+  
+  .tool-box {
+  background: #020617;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 400px;
+}
+
+.tool-box label {
+  display: block;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.tool-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+.tool-box button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #22c55e;
+}
+
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Investment Calculator 2026 – Calculate Returns Easily
+</h1>
+
+  <!-- Header Ad -->
+  <div class="ad ad-header">
+    Header Ad (Responsive)
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <h2>Compound Interest Calculator</h2>
+
+    <div class="tool-box">
+      <label>Initial Amount (₹)</label>
+      <input type="number" id="principal" placeholder="e.g. 10000">
+
+      <label>Annual Interest Rate (%)</label>
+      <input type="number" id="rate" placeholder="e.g. 12">
+
+      <label>Time (Years)</label>
+      <input type="number" id="time" placeholder="e.g. 5">
+
+      <button onclick="calculate()">Calculate</button>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <!-- In-Content Ad -->
+    <div class="ad ad-content">
+      In-Content Ad
+    </div>
+    
+    <section>
+<h2>How to Use This Investment Calculator</h2>
+<p>
+Enter your investment amount, expected return rate, and time period to calculate final value.
+This tool is useful for savings planning, FD, and long-term investments.
+</p>
+
+<h3>Why This Calculator is Useful</h3>
+<ul>
+  <li>Plan monthly savings</li>
+  <li>Estimate retirement corpus</li>
+  <li>Compare FD vs Mutual Funds</li>
+</ul>
+</section>
+
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="ad ad-sidebar">
+      Sidebar Ad (300x600)
+    </div>
+  </aside>
+
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 FreeTools</p>
+</footer>
+
+<script>
+function calculate() {
+  const p = parseFloat(document.getElementById("principal").value);
+  const r = parseFloat(document.getElementById("rate").value) / 100;
+  const t = parseFloat(document.getElementById("time").value);
+
+  if (isNaN(p) || isNaN(r) || isNaN(t)) {
+    document.getElementById("result").innerText = "Please enter valid values.";
+    return;
+  }
+
+  const amount = p * Math.pow(1 + r, t);
+  const interest = amount - p;
+
+  document.getElementById("result").innerHTML = `
+    Final Amount: ₹${amount.toFixed(2)} <br>
+    Total Interest: ₹${interest.toFixed(2)}
+  `;
+}
+
+</script>
+</body>
+</html>
