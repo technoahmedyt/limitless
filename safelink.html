@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SafeLink Generator – Secure Redirect Tool</title>
+
+  <meta name="description" content="Generate SafeLink URLs to protect your links and increase ad revenue. Free SafeLink generator tool.">
+
+  <style>
+  
+  body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #fff;
+}
+
+/* HEADER */
+.site-header {
+  padding: 20px;
+  text-align: center;
+  background: #020617;
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* CONTENT */
+.content {
+  flex: 3;
+}
+
+/* SIDEBAR */
+.sidebar {
+  flex: 1;
+  margin-left: 20px;
+}
+
+/* TOOLS GRID */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.tools-grid a {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #38bdf8;
+  text-align: center;
+}
+
+/* ADS */
+.ad {
+  background: #111827;
+  border: 1px dashed #475569;
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.ad-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+/* FOOTER */
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  background: #020617;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    display: none; /* Sidebar ads hidden on mobile */
+  }
+}
+
+  
+  .timer {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #facc15;
+}
+
+.go-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.go-btn:enabled {
+  opacity: 1;
+}
+
+.seo-text {
+  margin-top: 40px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+  
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1>SafeLink Generator</h1>
+
+  <div class="ad ad-header">
+    Header Ad (Responsive)
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <h2>Generate Secure SafeLink</h2>
+
+    <div class="tool-box">
+
+      <label>Enter Original URL</label>
+      <input type="text" id="originalLink" placeholder="https://example.com">
+
+      <button onclick="generateSafeLink()">Generate SafeLink</button>
+
+      <div id="result" class="result"></div>
+
+      <!-- Timer -->
+      <div id="timer" class="timer"></div>
+
+      <!-- Go Button -->
+      <button id="goBtn" class="go-btn" onclick="redirect()" disabled>
+        Continue to Link
+      </button>
+
+    </div>
+
+    <!-- In-Content Ad -->
+    <div class="ad ad-content">
+      In-Content Ad
+    </div>
+
+    <!-- SEO Content -->
+    <section class="seo-text">
+      <h3>What is SafeLink?</h3>
+      <p>
+        SafeLink is a secure redirect system used to protect original URLs,
+        prevent bots, and increase ad impressions.
+      </p>
+
+      <h3>Why Use SafeLink?</h3>
+      <ul>
+        <li>Protect affiliate links</li>
+        <li>Increase AdSense revenue</li>
+        <li>Prevent direct access</li>
+        <li>Better control over traffic</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="ad ad-sidebar">
+      Sidebar Ad (300x600)
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>© 2026 FreeTools</p>
+</footer>
+
+<script>
+let finalLink = "";
+let countdown = 5;
+
+function generateSafeLink() {
+  const input = document.getElementById("originalLink").value.trim();
+  const result = document.getElementById("result");
+  const timer = document.getElementById("timer");
+  const goBtn = document.getElementById("goBtn");
+
+  if (!input.startsWith("http")) {
+    result.innerText = "Please enter a valid URL (https://...)";
+    return;
+  }
+
+  finalLink = input;
+  result.innerHTML = "SafeLink generated successfully ✔";
+
+  countdown = 5;
+  goBtn.disabled = true;
+  timer.innerText = `Please wait ${countdown} seconds...`;
+
+  const interval = setInterval(() => {
+    countdown--;
+    timer.innerText = `Please wait ${countdown} seconds...`;
+
+    if (countdown === 0) {
+      clearInterval(interval);
+      timer.innerText = "You may proceed now.";
+      goBtn.disabled = false;
+    }
+  }, 1000);
+}
+
+function redirect() {
+  window.location.href = finalLink;
+}
+
+</script>
+</body>
+</html>
