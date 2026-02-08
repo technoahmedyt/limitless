@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Free Online Tools</title>
 
   <style>
+    .marq {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: rgb(0, 255, 0);
+    }
+
     /* ==========================
        THEME VARIABLES
     ========================== */
@@ -123,80 +132,84 @@
       .layout {
         flex-direction: column;
       }
+
       .sidebar {
         display: none;
       }
     }
   </style>
 </head>
+
 <body>
 
-<!-- HEADER -->
-<header class="site-header">
-  <h1>Free Online Tools</h1>
+  <!-- HEADER -->
+  <header class="site-header">
+    <h1>Free Online Tools</h1>
 
-  <div class="ad ad-header">
-    Header Ad (728x90 / 320x50)
+    <div class="ad ad-header">
+      Header Ad (728x90 / 320x50)
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="layout">
+
+    <!-- CONTENT -->
+    <main class="content">
+      <h2>Popular Tools</h2>
+      <marquee class="marq">This is a tool website</marquee><br>
+
+      <div class="tools-grid">
+        <a href="tools/calculator.html">🧮 Calculators</a>
+        <a href="tools/safelink.html">🔗 SafeLink</a>
+        <a href="tools/chart.html">📊 Charts</a>
+        <a href="tools/resume.html">📄 Resume Builder</a>
+        <a href="tools/calculator.html">🧮 Calculators</a>
+        <a href="tools/safelink.html">🔗 SafeLink</a>
+        <a href="tools/chart.html">📊 Charts</a>
+        <a href="tools/resume.html">📄 Resume Builder</a>
+        <a href="tools/calculator.html">🧮 Calculators</a>
+        <a href="tools/safelink.html">🔗 SafeLink</a>
+        <a href="tools/chart.html">📊 Charts</a>
+        <a href="tools/resume.html">📄 Resume Builder</a>
+      </div>
+
+      <div class="ad ad-content">
+        In-Content Ad (Responsive)
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="ad ad-sidebar">
+        Sidebar Ad (300x600)
+      </div>
+    </aside>
+
   </div>
-</header>
 
-<!-- MAIN LAYOUT -->
-<div class="layout">
-
-  <!-- CONTENT -->
-  <main class="content">
-    <h2>Popular Tools</h2>
-
-    <div class="tools-grid">
-      <a href="tools/calculator.html">🧮 Calculators</a>
-      <a href="tools/safelink.html">🔗 SafeLink</a>
-      <a href="tools/chart.html">📊 Charts</a>
-      <a href="tools/resume.html">📄 Resume Builder</a>
-      <a href="tools/calculator.html">🧮 Calculators</a>
-      <a href="tools/safelink.html">🔗 SafeLink</a>
-      <a href="tools/chart.html">📊 Charts</a>
-      <a href="tools/resume.html">📄 Resume Builder</a>
-      <a href="tools/calculator.html">🧮 Calculators</a>
-      <a href="tools/safelink.html">🔗 SafeLink</a>
-      <a href="tools/chart.html">📊 Charts</a>
-      <a href="tools/resume.html">📄 Resume Builder</a>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="ad ad-footer">
+      Footer Ad (Link Ads)
     </div>
+    <p>© 2026 FreeTools</p>
+  </footer>
 
-    <div class="ad ad-content">
-      In-Content Ad (Responsive)
-    </div>
-  </main>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="ad ad-sidebar">
-      Sidebar Ad (300x600)
-    </div>
-  </aside>
-
-</div>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="ad ad-footer">
-    Footer Ad (Link Ads)
-  </div>
-  <p>© 2026 FreeTools</p>
-</footer>
-
-<!-- ==========================
+  <!-- ==========================
      LIVE SYSTEM THEME SYNC
 ========================== -->
-<script>
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  <script>
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-  function applyTheme(e) {
-    document.documentElement.style.colorScheme = e.matches ? 'dark' : 'light';
-  }
+    function applyTheme(e) {
+      document.documentElement.style.colorScheme = e.matches ? 'dark' : 'light';
+    }
 
-  applyTheme(mediaQuery);
-  mediaQuery.addEventListener('change', applyTheme);
-</script>
+    applyTheme(mediaQuery);
+    mediaQuery.addEventListener('change', applyTheme);
+  </script>
 
 </body>
+
 </html>
