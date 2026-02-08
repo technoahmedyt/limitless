@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Free Online Tools</title>
+
+  <style>
+    /* ==========================
+       THEME VARIABLES
+    ========================== */
+
+    :root {
+      --bg-main: #ffffff;
+      --bg-secondary: #f1f5f9;
+      --bg-header: #e5e7eb;
+      --bg-card: #ffffff;
+      --text-main: #020617;
+      --text-muted: #475569;
+      --accent: #0284c7;
+      --ad-bg: #f8fafc;
+      --ad-border: #cbd5f5;
+    }
+
+    /* DARK MODE (SYSTEM) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-main: #0f172a;
+        --bg-secondary: #020617;
+        --bg-header: #020617;
+        --bg-card: #1e293b;
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+        --accent: #38bdf8;
+        --ad-bg: #111827;
+        --ad-border: #475569;
+      }
+    }
+
+    /* ==========================
+       BASE STYLES
+    ========================== */
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    .site-header {
+      padding: 20px;
+      text-align: center;
+      background: var(--bg-header);
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 3;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      flex: 1;
+      margin-left: 20px;
+    }
+
+    /* TOOLS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .tools-grid a {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--accent);
+      text-align: center;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .tools-grid a:hover {
+      transform: translateY(-4px);
+    }
+
+    /* ADS */
+    .ad {
+      background: var(--ad-bg);
+      border: 1px dashed var(--ad-border);
+      margin: 20px 0;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .ad-sidebar {
+      position: sticky;
+      top: 20px;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--bg-header);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1>Free Online Tools</h1>
+
+  <div class="ad ad-header">
+    Header Ad (728x90 / 320x50)
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- CONTENT -->
+  <main class="content">
+    <h2>Popular Tools</h2>
+
+    <div class="tools-grid">
+      <a href="tools/calculator.html">🧮 Calculators</a>
+      <a href="tools/safelink.html">🔗 SafeLink</a>
+      <a href="tools/chart.html">📊 Charts</a>
+      <a href="tools/resume.html">📄 Resume Builder</a>
+    </div>
+
+    <div class="ad ad-content">
+      In-Content Ad (Responsive)
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="ad ad-sidebar">
+      Sidebar Ad (300x600)
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="ad ad-footer">
+    Footer Ad (Link Ads)
+  </div>
+  <p>© 2026 FreeTools</p>
+</footer>
+
+<!-- ==========================
+     LIVE SYSTEM THEME SYNC
+========================== -->
+<script>
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(e) {
+    document.documentElement.style.colorScheme = e.matches ? 'dark' : 'light';
+  }
+
+  applyTheme(mediaQuery);
+  mediaQuery.addEventListener('change', applyTheme);
+</script>
+
+</body>
+</html>
