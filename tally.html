@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Tally Pro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+    --primary: #004b87;
+    --success: #28a745;
+    --danger: #dc3545;
+    --bg: #f8f9fc;
+    --card: #ffffff;
+    --text: #212529;
+    --border: #dee2e6;
+    --hover: #e8f4ff;
+    --light: #f1f3f5;
+}
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+.topbar {
+    background: var(--primary);
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 101;
+}
+.topbar .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+}
+.wrapper {
+    display: flex;
+    min-height: calc(100vh - 64px);
+}
+.sidebar {
+    width: 280px;
+    background: #e8f0fe;
+    padding: 20px 0;
+    border-right: 1px solid var(--border);
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 100;
+    left: 0;
+}
+.sidebar h3 {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    margin: 0 0 20px 0;
+    text-align: center;
+    font-size: 1.1rem;
+}
+.close-btn {
+    display: none;
+    text-align: right;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.sidebar li {
+    list-style: none;
+    padding: 14px 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.sidebar li:hover {
+    background: var(--hover);
+}
+.sidebar li.active {
+    background: var(--primary);
+    color: white;
+}
+.main {
+    margin-left: 280px;
+    padding: 30px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+}
+.section {
+    display: none;
+    background: var(--card);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+.section.active {
+    display: block;
+}
+h2 {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,75,135,0.2);
+}
+button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; padding: 8px 16px; font-size: 0.9rem; }
+.table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+.voucher-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+.voucher-table th, .voucher-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.voucher-table th {
+    background: #e8f0fe;
+}
+.voucher-table input[type=text], .voucher-table input[type=number] {
+    width: 100%;
+}
+.amount { text-align: right; font-weight: 500; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+th {
+    background: #e8f0fe;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+td {
+    padding: 12px 15px;
+    border-top: 1px solid var(--border);
+}
+tbody tr:hover {
+    background: var(--hover);
+}
+tbody tr:nth-child(even) {
+    background: #fafcff;
+}
+canvas {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 10px;
+}
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    font-size: 1.1rem;
+}
+@media (max-width: 900px) {
+    .menu-toggle { display: block; }
+    .close-btn { display: block; }
+    .sidebar {
+        left: -280px;
+        top: 64px;
+        height: calc(100vh - 64px);
+        width: 280px;
+    }
+    .sidebar.open { left: 0; }
+    .main { margin-left: 0; padding: 20px; }
+    .topbar { padding: 15px; }
+    .section { padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="title">Mini Tally Pro</div>
+    <div id="today"></div>
+</div>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="close-btn" onclick="toggleMenu()">×</div>
+        <h3>Gateway of Mini Tally</h3>
+        <li class="active" onclick="showSection('daybook', this)">Day Book</li>
+        <li onclick="showSection('payment', this)">F5: Payment Voucher</li>
+        <li onclick="showSection('receipt', this)">F6: Receipt Voucher</li>
+        <li onclick="showSection('journal', this)">F7: Journal Voucher</li>
+        <li onclick="showSection('capital', this)">Edit Capital</li>
+        <li onclick="showSection('trial', this)">Trial Balance</li>
+        <li onclick="showSection('pl', this)">Profit & Loss</li>
+        <li onclick="showSection('bs', this)">Balance Sheet</li>
+        <li onclick="showSection('charts', this)">Charts</li>
+        <li onclick="resetAll()" style="margin-top:30px;color:#dc3545;">Reset All Data</li>
+    </div>
+
+    <div class="main">
+        <!-- Day Book -->
+        <div id="daybook" class="section active">
+            <h2>Day Book</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Debit Account</th>
+                            <th>Credit Account</th>
+                            <th>Narration</th>
+                            <th class="amount">Amount (₹)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dayRows"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Payment Voucher -->
+        <div id="payment" class="section">
+            <h2>Payment Voucher (F5)</h2>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="paymentDate">
+            </div>
+            <div class="form-group">
+                <label>Narration</label>
+                <textarea id="paymentNarration" placeholder="Optional common narration for all lines"></textarea>
+            </div>
+            <div class="table-wrapper">
+                <table class="voucher-table">
+                    <thead>
+                        <tr>
+                            <th>Particulars (Dr)</th>
+                            <th class="amount">Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentLines"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>By Cash/Bank</strong></td>
+                            <td class="amount"><strong id="paymentTotal">0.00</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <button class="btn-primary" onclick="addLine('payment')">Add Line</button>
+            <button class="btn-success" onclick="saveVoucher('payment')">Accept (Ctrl+A)</button>
+            <button class="btn-danger" onclick="clearVoucher('payment')">Clear</button>
+        </div>
+
+        <!-- Receipt Voucher -->
+        <div id="receipt" class="section">
+            <h2>Receipt Voucher (F6)</h2>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="receiptDate">
+            </div>
+            <div class="form-group">
+                <label>Narration</label>
+                <textarea id="receiptNarration" placeholder="Optional common narration for all lines"></textarea>
+            </div>
+            <div class="table-wrapper">
+                <table class="voucher-table">
+                    <thead>
+                        <tr>
+                            <th>Particulars (Cr)</th>
+                            <th class="amount">Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="receiptLines"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>To Cash/Bank</strong></td>
+                            <td class="amount"><strong id="receiptTotal">0.00</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <button class="btn-primary" onclick="addLine('receipt')">Add Line</button>
+            <button class="btn-success" onclick="saveVoucher('receipt')">Accept (Ctrl+A)</button>
+            <button class="btn-danger" onclick="clearVoucher('receipt')">Clear</button>
+        </div>
+
+        <!-- Journal Voucher -->
+        <div id="journal" class="section">
+            <h2>Journal Voucher (F7)</h2>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="journalDate">
+            </div>
+            <div class="form-group">
+                <label>Narration</label>
+                <textarea id="journalNarration" placeholder="Optional narration"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Debit Account</label>
+                <input type="text" id="journalDebit" placeholder="e.g. Furniture">
+            </div>
+            <div class="form-group">
+                <label>Credit Account</label>
+                <input type="text" id="journalCredit" placeholder="e.g. Bank Loan">
+            </div>
+            <div class="form-group">
+                <label>Amount</label>
+                <input type="number" id="journalAmount" step="0.01" min="0.01">
+            </div>
+            <button class="btn-success" onclick="saveJournal()">Accept Journal</button>
+        </div>
+
+        <!-- Capital -->
+        <div id="capital" class="section">
+            <h2>Capital Account</h2>
+            <div class="form-group">
+                <label>Set/Update Capital Amount</label>
+                <input type="number" id="capitalInput" step="0.01" placeholder="Enter capital amount">
+            </div>
+            <button class="btn-primary" onclick="updateCapital()">Update Capital</button>
+            <p style="font-size:1.3rem;margin-top:30px;">Current Capital: ₹ <span id="capitalDisplay">0.00</span></p>
+        </div>
+
+        <!-- Reports -->
+        <div id="trial" class="section">
+            <h2>Trial Balance</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th class="amount">Debit (₹)</th>
+                            <th class="amount">Credit (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trialBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="pl" class="section">
+            <h2>Profit & Loss Account</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Expenses</th>
+                            <th class="amount">Amount</th>
+                            <th>Income</th>
+                            <th class="amount">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="bs" class="section">
+            <h2>Balance Sheet</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+                <div>
+                    <h3>Assets</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody id="bsAssets"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3>Liabilities & Capital</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody id="bsLiabilities"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="charts" class="section">
+            <h2>Expense Trend (30-Day Moving Average)</h2>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+let entries = JSON.parse(localStorage.getItem("entries")) || [];
+let capital = parseFloat(localStorage.getItem("capital")) || 0;
+let chart = null;
+
+const CASH_LEDGER = "Cash"; // Default cash/bank ledger name
+
+function save() {
+    localStorage.setItem("entries", JSON.stringify(entries));
+    localStorage.setItem("capital", JSON.stringify(capital));
+}
+
+function toggleMenu() {
+    document.querySelector('.sidebar').classList.toggle('open');
+}
+
+function showSection(id, el) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
+    if (el) el.classList.add("active");
+
+    // Set default date
+    if (["payment", "receipt", "_journal"].includes(id)) {
+        document.getElementById(id + "Date").valueAsDate = new Date();
+    }
+    if (id === "journal") document.getElementById("journalDate").valueAsDate = new Date();
+
+    // Init voucher
+    if (id === "payment" || id === "receipt") {
+        clearVoucher(id);
+    }
+
+    // Generate reports
+    if (["trial", "pl", "bs"].includes(id)) {
+        if (id === "trial") generateTrial();
+        if (id === "pl") generatePL();
+        if (id === "bs") generateBS();
+    }
+    if (id === "charts") generateChart();
+}
+
+function addEntry(date, debit, credit, amount, narration = "") {
+    entries.push({ date, debit, credit, amount: parseFloat(amount), narration, id: Date.now() + Math.random() });
+    save();
+    updateDaybook();
+}
+
+function addLine(type) {
+    const tbody = document.getElementById(type + "Lines");
+    const row = tbody.insertRow();
+    const isPayment = type === "payment";
+
+    const cell1 = row.insertCell();
+    const inputAcc = document.createElement("input");
+    inputAcc.type = "text";
+    inputAcc.placeholder = isPayment ? "Expense/Asset Account (Dr)" : "Income/Liability Account (Cr)";
+    cell1.appendChild(inputAcc);
+
+    const cell2 = row.insertCell();
+    const inputAmt = document.createElement("input");
+    inputAmt.type = "number";
+    inputAmt.step = "0.01";
+    inputAmt.min = "0.01";
+    inputAmt.oninput = () => calcTotal(type);
+    cell2.appendChild(inputAmt);
+    cell2.className = "amount";
+
+    const cell3 = row.insertCell();
+    const btn = document.createElement("button");
+    btn.textContent = "Remove";
+    btn.className = "btn-danger";
+    btn.onclick = () => {
+        row.remove();
+        calcTotal(type);
+    };
+    cell3.appendChild(btn);
+
+    calcTotal(type);
+}
+
+function calcTotal(type) {
+    let sum = 0;
+    document.querySelectorAll(`#${type}Lines input[type=number]`).forEach(i => sum += parseFloat(i.value) || 0);
+    document.getElementById(type + "Total").textContent = sum.toFixed(2);
+    return sum;
+}
+
+function saveVoucher(type) {
+    const date = document.getElementById(type + "Date").value;
+    const narration = document.getElementById(type + "Narration").value.trim();
+    const total = calcTotal(type);
+    if (!date || total <= 0) return alert("Enter valid date and amounts");
+
+    const isPayment = type === "payment";
+    const lines = document.querySelectorAll(`#${type}Lines tr`);
+
+    lines.forEach(row => {
+        const acc = row.querySelector("input[type=text]").value.trim();
+        const amt = parseFloat(row.querySelector("input[type=number]").value) || 0;
+        if (acc && amt > 0) {
+            if (isPayment) {
+                addEntry(date, acc, CASH_LEDGER, amt, narration);
+            } else {
+                addEntry(date, CASH_LEDGER, acc, amt, narration);
+            }
+        }
+    });
+
+    clearVoucher(type);
+    showSection("daybook", document.querySelector('.sidebar li:first-child'));
+}
+
+function clearVoucher(type) {
+    document.getElementById(type + "Lines").innerHTML = "";
+    document.getElementById(type + "Narration").value = "";
+    addLine(type);
+    calcTotal(type);
+}
+
+function saveJournal() {
+    const date = document.getElementById("journalDate").value;
+    const debit = document.getElementById("journalDebit").value.trim();
+    const credit = document.getElementById("journalCredit").value.trim();
+    const narration = document.getElementById("journalNarration").value.trim();
+    const amount = parseFloat(document.getElementById("journalAmount").value) || 0;
+
+    if (!date || !debit || !credit || amount <= 0) return alert("Fill all fields correctly");
+
+    addEntry(date, debit, credit, amount, narration);
+
+    // Clear form
+    document.getElementById("journalDebit").value = "";
+    document.getElementById("journalCredit").value = "";
+    document.getElementById("journalAmount").value = "";
+    document.getElementById("journalNarration").value = "";
+}
+
+function deleteEntry(id) {
+    if (confirm("Delete this transaction permanently?")) {
+        entries = entries.filter(e => e.id !== id);
+        save();
+        updateDaybook();
+    }
+}
+
+function updateDaybook() {
+    const tbody = document.getElementById("dayRows");
+    tbody.innerHTML = "";
+    if (entries.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty">No transactions recorded yet.</td></tr>`;
+        return;
+    }
+
+    const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+    sorted.forEach(e => {
+        const row = tbody.insertRow();
+        row.insertCell().textContent = e.date;
+        row.insertCell().textContent = e.debit;
+        row.insertCell().textContent = e.credit;
+        row.insertCell().textContent = e.narration || "-";
+        const amt = row.insertCell();
+        amt.textContent = e.amount.toFixed(2);
+        amt.className = "amount";
+        const act = row.insertCell();
+        const del = document.createElement("button");
+        del.textContent = "Delete";
+        del.className = "btn-danger";
+        del.onclick = () => deleteEntry(e.id);
+        act.appendChild(del);
+    });
+}
+
+function updateCapital() {
+    const val = parseFloat(document.getElementById("capitalInput").value) || 0;
+    if (val < 0) return alert("Capital cannot be negative");
+    capital = val;
+    save();
+    document.getElementById("capitalDisplay").textContent = capital.toFixed(2);
+    document.getElementById("capitalInput").value = "";
+}
+
+function generateTrial() {
+    const tbody = document.getElementById("trialBody");
+    tbody.innerHTML = "";
+    const bal = {};
+    entries.forEach(e => {
+        bal[e.debit] = (bal[e.debit] || 0) + e.amount;
+        bal[e.credit] = (bal[e.credit] || 0) - e.amount;
+    });
+    bal["Capital"] = (bal["Capital"] || 0) - capital;
+    bal[CASH_LEDGER] = (bal[CASH_LEDGER] || 0) + capital;
+
+    let drTotal = 0, crTotal = 0;
+    Object.keys(bal).sort().forEach(acc => {
+        const amount = bal[acc];
+        const row = tbody.insertRow();
+        row.insertCell().textContent = acc;
+        if (amount > 0) {
+            const cell = row.insertCell();
+            cell.textContent = amount.toFixed(2);
+            cell.className = "amount";
+            row.insertCell();
+            drTotal += amount;
+        } else {
+            row.insertCell();
+            const cell = row.insertCell();
+            cell.textContent = Math.abs(amount).toFixed(2);
+            cell.className = "amount";
+            crTotal += Math.abs(amount);
+        }
+    });
+    const totalRow = tbody.insertRow();
+    totalRow.style.fontWeight = "bold";
+    totalRow.innerHTML = `<td>Total</td><td class="amount">${drTotal.toFixed(2)}</td><td class="amount">${crTotal.toFixed(2)}</td>`;
+}
+
+function generatePL() {
+    const tbody = document.getElementById("plBody");
+    tbody.innerHTML = "";
+    const expenses = {}, incomes = {};
+    entries.forEach(e => {
+        if (e.debit !== CASH_LEDGER && e.credit === CASH_LEDGER) expenses[e.debit] = (expenses[e.debit] || 0) + e.amount;
+        if (e.debit === CASH_LEDGER && e.credit !== CASH_LEDGER) incomes[e.credit] = (incomes[e.credit] || 0) + e.amount;
+    });
+
+    let expTotal = 0, incTotal = 0;
+    let rows = "";
+    Object.keys(expenses).sort().forEach(a => {
+        rows += `<tr><td>${a}</td><td class="amount">${expenses[a].toFixed(2)}</td><td></td><td></td></tr>`;
+        expTotal += expenses[a];
+    });
+    Object.keys(incomes).sort().forEach(a => {
+        rows += `<tr><td></td><td></td><td>${a}</td><td class="amount">${incomes[a].toFixed(2)}</td></tr>`;
+        incTotal += incomes[a];
+    });
+
+    const profit = incTotal - expTotal;
+    if (profit >= 0) {
+        rows += `<tr><td><strong>Net Profit</strong></td><td class="amount"><strong>${profit.toFixed(2)}</strong></td><td></td><td></td></tr>`;
+    } else {
+        rows += `<tr><td></td><td></td><td><strong>Net Loss</strong></td><td class="amount"><strong>${Math.abs(profit).toFixed(2)}</strong></td></tr>`;
+    }
+
+    rows += `<tr style="font-weight:bold"><td>Total</td><td class="amount">${(expTotal + Math.max(0, -profit)).toFixed(2)}</td><td>Total</td><td class="amount">${(incTotal + Math.max(0, profit)).toFixed(2)}</td></tr>`;
+    tbody.innerHTML = rows;
+}
+
+function generateBS() {
+    let cashBalance = capital;
+    entries.forEach(e => {
+        if (e.debit === CASH_LEDGER) cashBalance += e.amount;
+        if (e.credit === CASH_LEDGER) cashBalance -= e.amount;
+    });
+
+    const income = entries.reduce((s, e) => e.debit === CASH_LEDGER && e.credit !== CASH_LEDGER ? s + e.amount : s, 0);
+    const expense = entries.reduce((s, e) => e.debit !== CASH_LEDGER && e.credit === CASH_LEDGER ? s + e.amount : s, 0);
+    const profit = income - expense;
+    const totalCapital = capital + profit;
+
+    document.getElementById("bsAssets").innerHTML = `
+        <tr><td>Cash / Bank</td><td class="amount">${cashBalance.toFixed(2)}</td></tr>
+        <tr style="font-weight:bold"><td>Total Assets</td><td class="amount">${cashBalance.toFixed(2)}</td></tr>
+    `;
+
+    let liab = `<tr><td>Capital</td><td class="amount">${capital.toFixed(2)}</td></tr>`;
+    if (profit >= 0) liab += `<tr><td>Add: Net Profit</td><td class="amount">${profit.toFixed(2)}</td></tr>`;
+    else liab += `<tr><td>Less: Net Loss</td><td class="amount">${Math.abs(profit).toFixed(2)}</td></tr>`;
+    liab += `<tr style="font-weight:bold"><td>Total Capital & Liabilities</td><td class="amount">${totalCapital.toFixed(2)}</td></tr>`;
+    document.getElementById("bsLiabilities").innerHTML = liab;
+}
+
+function generateChart() {
+    if (chart) chart.destroy();
+    const daily = {};
+    entries.forEach(e => {
+        if (e.credit === CASH_LEDGER) {
+            daily[e.date] = (daily[e.date] || 0) + e.amount;
+        }
+    });
+    const dates = Object.keys(daily).sort();
+    const values = dates.map(d => daily[d]);
+    const avg = [];
+    for (let i = 0; i < dates.length; i++) {
+        let sum = 0, count = 0;
+        for (let j = i; j >= 0; j--) {
+            const diff = (new Date(dates[i]) - new Date(dates[j])) / (86400000);
+            if (diff <= 30) { sum += daily[dates[j]]; count++; }
+            else break;
+        }
+        avg.push(count ? (sum / count).toFixed(2) : 0);
+    }
+
+    chart = new Chart(document.getElementById("chart"), {
+        type: "line",
+        data: {
+            labels: dates,
+            datasets: [
+                { label: "Daily Outflow", data: values, borderColor: "#004b87", backgroundColor: "rgba(0,75,135,0.1)", fill: true, tension: 0.4 },
+                { label: "30-Day Avg", data: avg, borderColor: "#dc3545", borderDash: [6,6], fill: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { title: { display: true, text: "Daily Expense Trend" }, legend: { position: "bottom" } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+}
+
+function resetAll() {
+    if (confirm("This will delete ALL data permanently. Continue?")) {
+        entries = [];
+        capital = 0;
+        localStorage.clear();
+        updateDaybook();
+        document.getElementById("capitalDisplay").textContent = "0.00";
+        alert("All data reset!");
+    }
+}
+
+// Init
+document.getElementById("today").textContent = new Date().toLocaleDateString("en-GB");
+document.getElementById("capitalDisplay").textContent = capital.toFixed(2);
+updateDaybook();
+</script>
+</body>
+</html>
