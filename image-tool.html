@@ -6,139 +6,57 @@
 <title>Advanced Image Editor Pro</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#1e1f26;color:#fff;padding:20px;display:flex;justify-content:center}
+.container{max-width:1100px;width:100%}
+h1{text-align:center;margin-bottom:20px}
 
-body{
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  min-height:100vh;
-  padding:30px;
-  display:flex;
-  justify-content:center;
-}
+canvas{background:#000;width:100%;border-radius:8px;margin-top:15px}
 
-.container{
-  width:100%;
-  max-width:1200px;
-}
-
-h1{
-  text-align:center;
-  margin-bottom:25px;
-  font-size:28px;
-  font-weight:600;
-  color:#fff;
-}
-
-.glass{
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:20px;
-  border:1px solid rgba(255,255,255,0.15);
-  box-shadow:0 8px 32px rgba(0,0,0,0.3);
-}
-
-.section-title{
+.section{
+  background:#2a2d3a;
+  padding:15px;
   margin-bottom:15px;
-  font-size:18px;
-  font-weight:500;
-  color:#fff;
+  border-radius:10px;
 }
+
+.section h2{margin-bottom:10px;font-size:18px}
 
 .controls{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
-.control-group{
+.controls label{
   display:flex;
   flex-direction:column;
-}
-
-label{
   font-size:13px;
-  margin-bottom:5px;
-  color:#ddd;
 }
 
-input[type=range]{
-  accent-color:#4e73df;
-}
-
-input[type=number], input[type=file]{
-  padding:8px;
-  border-radius:8px;
+input[type=range], input[type=number]{
+  padding:5px;
+  border-radius:5px;
   border:none;
-  background:#fff;
-  color:#333;
 }
 
 button{
-  padding:10px;
+  padding:8px 12px;
   border:none;
-  border-radius:8px;
-  font-weight:500;
+  border-radius:6px;
   cursor:pointer;
-  transition:0.3s ease;
-}
-
-.btn-primary{
+  font-weight:bold;
   background:#4e73df;
   color:#fff;
 }
 
-.btn-primary:hover{
-  background:#2e59d9;
-}
+button:hover{opacity:0.8}
 
-.btn-success{
-  background:#1cc88a;
-  color:#fff;
-}
-
-.btn-danger{
-  background:#e74a3b;
-  color:#fff;
-}
-
-.btn-dark{
-  background:#444;
-  color:#fff;
-}
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-
-.canvas-wrapper{
-  background:#111;
-  padding:15px;
-  border-radius:15px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-canvas{
-  max-width:100%;
-  border-radius:10px;
-}
-
-.download-btn{
-  width:100%;
-  margin-top:15px;
-}
+.btn-danger{background:#e74a3b}
+.btn-success{background:#1cc88a}
 
 @media(max-width:768px){
-  body{padding:15px;}
+  .controls{flex-direction:column}
 }
 </style>
 </head>
@@ -147,57 +65,54 @@ canvas{
 <div class="container">
 <h1>Advanced Image Editing Tool</h1>
 
-<div class="glass">
-  <div class="section-title">Upload Image</div>
-  <input type="file" id="upload" accept="image/*">
+<input type="file" id="upload" accept="image/*">
+
+<div class="section">
+<h2>Adjustments</h2>
+<div class="controls">
+<label>Brightness <input type="range" id="brightness" min="0" max="200" value="100"></label>
+<label>Contrast <input type="range" id="contrast" min="0" max="200" value="100"></label>
+<label>Saturation <input type="range" id="saturation" min="0" max="200" value="100"></label>
+<label>Blur <input type="range" id="blur" min="0" max="10" step="0.1" value="0"></label>
+<label>Grayscale <input type="range" id="grayscale" min="0" max="100" value="0"></label>
+<label>Sepia <input type="range" id="sepia" min="0" max="100" value="0"></label>
+</div>
 </div>
 
-<div class="glass">
-  <div class="section-title">Adjustments</div>
-  <div class="controls">
-    <div class="control-group">
-      <label>Brightness</label>
-      <input type="range" id="brightness" min="0" max="200" value="100">
-    </div>
-    <div class="control-group">
-      <label>Contrast</label>
-      <input type="range" id="contrast" min="0" max="200" value="100">
-    </div>
-    <div class="control-group">
-      <label>Saturation</label>
-      <input type="range" id="saturation" min="0" max="200" value="100">
-    </div>
-    <div class="control-group">
-      <label>Blur</label>
-      <input type="range" id="blur" min="0" max="10" step="0.1" value="0">
-    </div>
-    <div class="control-group">
-      <label>Grayscale</label>
-      <input type="range" id="grayscale" min="0" max="100" value="0">
-    </div>
-    <div class="control-group">
-      <label>Sepia</label>
-      <input type="range" id="sepia" min="0" max="100" value="0">
-    </div>
-  </div>
+<div class="section">
+<h2>Transform</h2>
+<div class="controls">
+<button onclick="rotate(-90)">Rotate ⟲</button>
+<button onclick="rotate(90)">Rotate ⟳</button>
+<button onclick="flipH()">Flip H</button>
+<button onclick="flipV()">Flip V</button>
+<button class="btn-danger" onclick="resetAll()">Reset</button>
+</div>
 </div>
 
-<div class="glass">
-  <div class="section-title">Transform</div>
-  <div class="controls">
-    <button class="btn-dark" onclick="rotate(-90)">Rotate Left</button>
-    <button class="btn-dark" onclick="rotate(90)">Rotate Right</button>
-    <button class="btn-dark" onclick="flipH()">Flip Horizontal</button>
-    <button class="btn-dark" onclick="flipV()">Flip Vertical</button>
-    <button class="btn-danger" onclick="resetAll()">Reset</button>
-  </div>
+<div class="section">
+<h2>Resize</h2>
+<div class="controls">
+<label>Width <input type="number" id="resizeW"></label>
+<label>Height <input type="number" id="resizeH"></label>
+<button onclick="resizeImage()">Apply Resize</button>
+</div>
 </div>
 
-<div class="glass canvas-wrapper">
-  <canvas id="canvas"></canvas>
+<div class="section">
+<h2>Crop</h2>
+<div class="controls">
+<label>X <input type="number" id="cropX" value="0"></label>
+<label>Y <input type="number" id="cropY" value="0"></label>
+<label>Width <input type="number" id="cropW"></label>
+<label>Height <input type="number" id="cropH"></label>
+<button onclick="cropImage()">Apply Crop</button>
+</div>
 </div>
 
-<button class="btn-success download-btn" onclick="downloadImage()">Download Edited Image</button>
+<canvas id="canvas"></canvas>
+
+<button class="btn-success" onclick="downloadImage()">Download Edited Image</button>
 
 </div>
 
@@ -206,7 +121,7 @@ const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
 let img=new Image();
-let rotation=0,flipX=1,flipY=1;
+let rotation=0, flipX=1, flipY=1;
 
 document.getElementById("upload").addEventListener("change",e=>{
 const file=e.target.files[0];
@@ -216,6 +131,7 @@ reader.onload=()=>{
 img.onload=()=>{
 canvas.width=img.width;
 canvas.height=img.height;
+setResizeInputs();
 draw();
 }
 img.src=reader.result;
@@ -230,7 +146,7 @@ ctx.filter=getFilters();
 ctx.translate(canvas.width/2,canvas.height/2);
 ctx.rotate(rotation*Math.PI/180);
 ctx.scale(flipX,flipY);
-ctx.drawImage(img,-img.width/2,-img.height/2);
+ctx.drawImage(img,-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
 ctx.restore();
 }
 
@@ -252,6 +168,36 @@ el.addEventListener("input",draw);
 function rotate(deg){rotation=(rotation+deg)%360;draw();}
 function flipH(){flipX*=-1;draw();}
 function flipV(){flipY*=-1;draw();}
+
+function resizeImage(){
+const w=parseInt(resizeW.value);
+const h=parseInt(resizeH.value);
+if(!w||!h)return;
+canvas.width=w;
+canvas.height=h;
+draw();
+}
+
+function cropImage(){
+const x=parseInt(cropX.value);
+const y=parseInt(cropY.value);
+const w=parseInt(cropW.value);
+const h=parseInt(cropH.value);
+if(!w||!h)return;
+
+const imageData=ctx.getImageData(x,y,w,h);
+canvas.width=w;
+canvas.height=h;
+ctx.putImageData(imageData,0,0);
+}
+
+function setResizeInputs(){
+resizeW.value=canvas.width;
+resizeH.value=canvas.height;
+cropW.value=canvas.width;
+cropH.value=canvas.height;
+}
+
 function resetAll(){
 rotation=0;flipX=1;flipY=1;
 brightness.value=100;
@@ -260,8 +206,12 @@ saturation.value=100;
 blur.value=0;
 grayscale.value=0;
 sepia.value=0;
+canvas.width=img.width;
+canvas.height=img.height;
+setResizeInputs();
 draw();
 }
+
 function downloadImage(){
 const link=document.createElement("a");
 link.download="edited-image.png";
