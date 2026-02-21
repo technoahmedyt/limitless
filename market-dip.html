@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Market Dip Alert Tool</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary:    #111827;
+      --accent:     #3b82f6;
+      --danger:     #ef4444;
+      --warning:    #f59e0b;
+      --info:       #3b82f6;
+      --muted:      #6b7280;
+      --bg:         #f8fafc;
+      --card:       #ffffff;
+      --border:     #e5e7eb;
+      --radius:     10px;
+      --shadow:     0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      min-height: 100vh;
+      padding: 24px 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 0.375rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 0.75rem;
+    }
+
+    .preset-btn {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .preset-btn:hover {
+      background: #e5e7eb;
+      border-color: #9ca3af;
+    }
+
+    .result-container {
+      margin-top: 1.5rem;
+      padding: 16px;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      min-height: 80px;
+      transition: all 0.2s ease;
+    }
+
+    .dip-percentage {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-strong  { color: var(--danger); }
+    .status-moderate { color: var(--warning); }
+    .status-minor   { color: var(--info); }
+    .status-none    { color: #6b7280; }
+
+    .strength-bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .strength-strong  { background: var(--danger); }
+    .strength-moderate { background: var(--warning); }
+    .strength-minor   { background: var(--info); }
+
+    .ad-slot {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border: 1px dashed #d1d5db;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 24px 0;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.875rem;
+      font-weight: 500;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .disclaimer {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 18px; }
+      h2 { font-size: 1.35rem; }
+      .dip-percentage { font-size: 1.875rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Live Market Dip Alert</h2>
+
+    <div class="form-group">
+      <label>Previous Market High</label>
+      <input type="number" id="high" placeholder="e.g. 20000" step="any" min="0" value="20000">
+    </div>
+
+    <div class="form-group">
+      <label>Current Index Value</label>
+      <input type="number" id="current" placeholder="e.g. 18500" step="any" min="0" value="19000">
+    </div>
+
+    <div class="form-group">
+      <label>Dip Threshold Presets</label>
+      <div class="presets">
+        <button class="preset-btn" onclick="applyDip(5)">5%</button>
+        <button class="preset-btn" onclick="applyDip(10)">10%</button>
+        <button class="preset-btn" onclick="applyDip(15)">15%</button>
+        <button class="preset-btn" onclick="applyDip(20)">20%</button>
+      </div>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+      <div class="dip-percentage" id="dipPercent">—</div>
+      <div id="statusText"></div>
+      <div class="strength-bar">
+        <div class="strength-fill" id="strengthBar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot">Ad Slot — 600×90 / Responsive Banner</div>
+
+  <div class="card">
+    <p class="disclaimer">
+      <strong>Disclaimer:</strong> This tool is for educational & informational purposes only.<br>
+      It does not constitute financial, investment, or trading advice.
+    </p>
+  </div>
+
+</div>
+
+<script>
+function formatNumber(num) {
+  return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
+function applyDip(perc) {
+  const high = parseFloat(document.getElementById('high').value) || 0;
+  if (high > 0) {
+    document.getElementById('current').value = (high * (1 - perc/100)).toFixed(0);
+    calculateDip();
+  }
+}
+
+function calculateDip() {
+  const highEl    = document.getElementById('high');
+  const currentEl = document.getElementById('current');
+  const resultEl  = document.getElementById('resultContainer');
+  const percEl    = document.getElementById('dipPercent');
+  const statusEl  = document.getElementById('statusText');
+  const barEl     = document.getElementById('strengthBar');
+
+  let high    = parseFloat(highEl.value)    || 0;
+  let current = parseFloat(currentEl.value) || 0;
+
+  // Input validation
+  if (high <= 0) {
+    percEl.textContent = '—';
+    statusEl.innerHTML = '<span style="color:#dc2626">Please enter a valid previous high</span>';
+    barEl.style.width = '0%';
+    resultEl.style.background = '#fef2f2';
+    return;
+  }
+
+  if (current > high) {
+    percEl.textContent = '—';
+    statusEl.innerHTML = 'Current value is <strong>above</strong> previous high';
+    barEl.style.width = '0%';
+    resultEl.style.background = '#f0fdf4';
+    return;
+  }
+
+  if (current <= 0) {
+    percEl.textContent = '—';
+    statusEl.innerHTML = '<span style="color:#dc2626">Current value must be positive</span>';
+    barEl.style.width = '0%';
+    resultEl.style.background = '#fef2f2';
+    return;
+  }
+
+  let dipPercent = ((high - current) / high) * 100;
+
+  percEl.textContent = dipPercent.toFixed(2) + '%';
+
+  let status = '';
+  let colorClass = 'status-none';
+  let barColor = '';
+
+  if (dipPercent >= 15) {
+    status = 'Strong Dip — Potential Deployment Zone';
+    colorClass = 'status-strong';
+    barColor = 'strength-strong';
+  } else if (dipPercent >= 10) {
+    status = 'Moderate Dip';
+    colorClass = 'status-moderate';
+    barColor = 'strength-moderate';
+  } else if (dipPercent >= 5) {
+    status = 'Minor Dip';
+    colorClass = 'status-minor';
+    barColor = 'strength-minor';
+  } else {
+    status = 'No significant dip detected';
+    colorClass = 'status-none';
+    barColor = '';
+  }
+
+  statusEl.innerHTML = `<strong class="${colorClass}">${status}</strong>`;
+  barEl.className = 'strength-fill ' + barColor;
+  barEl.style.width = Math.min(dipPercent * 3, 100) + '%'; // scale visually (×3 so 10% → 30% bar)
+
+  // Subtle highlight
+  resultEl.style.background = dipPercent >= 10 ? '#fefce8' : '#f9fafb';
+}
+
+// Live update
+document.querySelectorAll('#high, #current').forEach(input => {
+  input.addEventListener('input', calculateDip);
+});
+
+// Initial calculation
+calculateDip();
+</script>
+
+</body>
+</html>
