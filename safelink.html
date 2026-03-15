@@ -1,241 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SafeLink Generator – Secure Redirect Tool</title>
-
-  <meta name="description" content="Generate SafeLink URLs to protect your links and increase ad revenue. Free SafeLink generator tool.">
-
-  <style>
-  
-  body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: #fff;
-}
-
-/* HEADER */
-.site-header {
-  padding: 20px;
-  text-align: center;
-  background: #020617;
-}
-
-/* LAYOUT */
-.layout {
-  display: flex;
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* CONTENT */
-.content {
-  flex: 3;
-}
-
-/* SIDEBAR */
-.sidebar {
-  flex: 1;
-  margin-left: 20px;
-}
-
-/* TOOLS GRID */
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-}
-
-.tools-grid a {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #38bdf8;
-  text-align: center;
-}
-
-/* ADS */
-.ad {
-  background: #111827;
-  border: 1px dashed #475569;
-  margin: 20px 0;
-  padding: 20px;
-  text-align: center;
-  color: #94a3b8;
-  font-size: 14px;
-}
-
-.ad-sidebar {
-  position: sticky;
-  top: 20px;
-}
-
-/* FOOTER */
-.site-footer {
-  text-align: center;
-  padding: 20px;
-  background: #020617;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-  .sidebar {
-    display: none; /* Sidebar ads hidden on mobile */
-  }
-}
-
-  
-  .timer {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #facc15;
-}
-
-.go-btn {
-  margin-top: 15px;
-  width: 100%;
-  padding: 12px;
-  background: #22c55e;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  opacity: 0.5;
-}
-
-.go-btn:enabled {
-  opacity: 1;
-}
-
-.seo-text {
-  margin-top: 40px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-  
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Stock Risk Calculator</title>
+    <style>
+        :root {
+            --bg: #f9fafb;
+            --card: #ffffff;
+            --text: #111827;
+            --text-muted: #6b7280;
+            --border: #d1d5db;
+            --accent: #2563eb;
+            --accent-light: rgba(37, 99, 235, 0.1);
+            --output: #1e40af;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 1.5rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+        .container { max-width: 960px; width: 100%; }
+        header {
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+        .section { margin-bottom: 2rem; }
+        .section h2 {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .card label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .card input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+            text-align: center;
+            background: var(--card);
+            color: var(--text);
+        }
+        .card input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+        .card input::placeholder { color: #9ca3af; }
+        .output {
+            margin-top: 0.6rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--output);
+            min-height: 1.6em;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            header { font-size: 1.6rem; }
+        }
+    </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="site-header">
-  <h1>SafeLink Generator</h1>
-
-  <div class="ad ad-header">
-    Header Ad (Responsive)
-  </div>
-</header>
-
-<!-- MAIN LAYOUT -->
-<div class="layout">
-
-  <!-- CONTENT -->
-  <main class="content">
-
-    <h2>Generate Secure SafeLink</h2>
-
-    <div class="tool-box">
-
-      <label>Enter Original URL</label>
-      <input type="text" id="originalLink" placeholder="https://example.com">
-
-      <button onclick="generateSafeLink()">Generate SafeLink</button>
-
-      <div id="result" class="result"></div>
-
-      <!-- Timer -->
-      <div id="timer" class="timer"></div>
-
-      <!-- Go Button -->
-      <button id="goBtn" class="go-btn" onclick="redirect()" disabled>
-        Continue to Link
-      </button>
-
+    <div class="container">
+        <header>Advanced Stock Risk Calculator</header>
+        <div class="section">
+            <h2>Inputs</h2>
+            <div class="grid">
+                <div class="card">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" placeholder="Enter amount">
+                </div>
+                <div class="card">
+                    <label for="entry">Entry Price</label>
+                    <input type="number" id="entry" placeholder="Enter entry price">
+                </div>
+                <div class="card">
+                    <label for="sl">Stop Loss</label>
+                    <input type="number" id="sl" placeholder="Enter stop loss">
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Results</h2>
+            <div class="grid">
+                <div class="card"><label>Difference</label><div class="output" id="difference">-</div></div>
+                <div class="card"><label>Quantity</label><div class="output" id="quantity">-</div></div>
+                <div class="card"><label>Capital Required</label><div class="output" id="capital">-</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Target Per Quantity</h2>
+            <div class="grid">
+                <div class="card"><label>Target 1:1</label><div class="output" id="target11">-</div></div>
+                <div class="card"><label>Target 1:2</label><div class="output" id="target12">-</div></div>
+                <div class="card"><label>Target 1:3</label><div class="output" id="target13">-</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Price Targets</h2>
+            <div class="grid">
+                <div class="card"><label>Price 1:1</label><div class="output" id="price11">-</div></div>
+                <div class="card"><label>Price 1:2</label><div class="output" id="price12">-</div></div>
+                <div class="card"><label>Price 1:3</label><div class="output" id="price13">-</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Profit Amount</h2>
+            <div class="grid">
+                <div class="card"><label>Profit 1:1</label><div class="output" id="profit11">-</div></div>
+                <div class="card"><label>Profit 1:2</label><div class="output" id="profit12">-</div></div>
+                <div class="card"><label>Profit 1:3</label><div class="output" id="profit13">-</div></div>
+            </div>
+        </div>
     </div>
+    <script>
+        const inputs = document.querySelectorAll("#amount, #entry, #sl");
 
-    <!-- In-Content Ad -->
-    <div class="ad ad-content">
-      In-Content Ad
-    </div>
+        function calculate() {
+            let amount = parseFloat(document.getElementById("amount").value);
+            let entry = parseFloat(document.getElementById("entry").value);
+            let sl = parseFloat(document.getElementById("sl").value);
 
-    <!-- SEO Content -->
-    <section class="seo-text">
-      <h3>What is SafeLink?</h3>
-      <p>
-        SafeLink is a secure redirect system used to protect original URLs,
-        prevent bots, and increase ad impressions.
-      </p>
+            if (isNaN(amount) || isNaN(entry) || isNaN(sl) || entry <= sl || amount <= 0) {
+                ["difference","quantity","capital","target11","target12","target13","price11","price12","price13","profit11","profit12","profit13"]
+                    .forEach(id => document.getElementById(id).innerText = "-");
+                return;
+            }
 
-      <h3>Why Use SafeLink?</h3>
-      <ul>
-        <li>Protect affiliate links</li>
-        <li>Increase AdSense revenue</li>
-        <li>Prevent direct access</li>
-        <li>Better control over traffic</li>
-      </ul>
-    </section>
+            let difference = entry - sl;
+            document.getElementById("difference").innerText = difference.toFixed(2);
 
-  </main>
+            let quantity = Math.floor(amount / difference);
+            document.getElementById("quantity").innerText = quantity;
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="ad ad-sidebar">
-      Sidebar Ad (300x600)
-    </div>
-  </aside>
+            let capital = entry * quantity;
+            document.getElementById("capital").innerText = capital.toFixed(2);
 
-</div>
+            let t1 = difference, t2 = difference * 2, t3 = difference * 3;
+            document.getElementById("target11").innerText = t1.toFixed(2);
+            document.getElementById("target12").innerText = t2.toFixed(2);
+            document.getElementById("target13").innerText = t3.toFixed(2);
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <p>© 2026 FreeTools</p>
-</footer>
+            document.getElementById("price11").innerText = (entry + t1).toFixed(2);
+            document.getElementById("price12").innerText = (entry + t2).toFixed(2);
+            document.getElementById("price13").innerText = (entry + t3).toFixed(2);
 
-<script>
-let finalLink = "";
-let countdown = 5;
+            document.getElementById("profit11").innerText = (t1 * quantity).toFixed(2);
+            document.getElementById("profit12").innerText = (t2 * quantity).toFixed(2);
+            document.getElementById("profit13").innerText = (t3 * quantity).toFixed(2);
+        }
 
-function generateSafeLink() {
-  const input = document.getElementById("originalLink").value.trim();
-  const result = document.getElementById("result");
-  const timer = document.getElementById("timer");
-  const goBtn = document.getElementById("goBtn");
-
-  if (!input.startsWith("http")) {
-    result.innerText = "Please enter a valid URL (https://...)";
-    return;
-  }
-
-  finalLink = input;
-  result.innerHTML = "SafeLink generated successfully ✔";
-
-  countdown = 5;
-  goBtn.disabled = true;
-  timer.innerText = `Please wait ${countdown} seconds...`;
-
-  const interval = setInterval(() => {
-    countdown--;
-    timer.innerText = `Please wait ${countdown} seconds...`;
-
-    if (countdown === 0) {
-      clearInterval(interval);
-      timer.innerText = "You may proceed now.";
-      goBtn.disabled = false;
-    }
-  }, 1000);
-}
-
-function redirect() {
-  window.location.href = finalLink;
-}
-
-</script>
+        inputs.forEach(input => input.addEventListener("input", calculate));
+        calculate();
+    </script>
 </body>
 </html>
+
+<b><span style="background-color: #f9f9f9; color: blue; font-family: monospace; font-size: 12px;">{fullwidth}</span></b>
