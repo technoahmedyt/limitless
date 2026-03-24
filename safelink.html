@@ -1,322 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Minimal Layout</title>
-
-    <!--CSS-->
-    <style>
-       :root{
-    --primary:#0f172a;
-    --accent:#2563eb;
-    --success:#16a34a;
-    --danger:#dc2626;
-    --bg:#f1f5f9;
-    --card:#ffffff;
-    --border:#e2e8f0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TinyRedirect – Fast Minimal Shortener</title>
+<style>
+:root {
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --accent: #0ea5e9;
+  --accent-hover: #0284c7;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
 }
 
-/* ===== GLOBAL ===== */
-* { box-sizing: border-box; }
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: #222;
-    line-height: 1.6;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
-/* ===== HEADER ===== */
-header {
-    background: var(--primary);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* CARD LAYOUT */
+.container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.5s ease;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
-/* ===== NAV ===== */
-nav {
-    background: white;
-    padding: 14px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
+/* HEADER */
+h1 {
+  font-size: 28px;
+  text-align: center;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
-nav a {
-    margin: 0 16px;
-    text-decoration: none;
-    color: #334155;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-nav a:hover { color: var(--accent); }
-
-/* ===== HEADER AD ===== */
-.he-ad {
-    background: #f8fafc;
-    text-align: center;
-    padding: 12px;
-    font-size: 13px;
-    color: #64748b;
-    border-bottom: 1px solid var(--border);
+h1::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  margin: 10px auto 0;
+  border-radius: 3px;
 }
 
-/* ===== LAYOUT ===== */
-.containerD {
-    display: flex;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+/* INPUT + BUTTON */
+input[type="url"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  background: #f9fafb;
+  color: var(--text);
+  transition: border 0.25s, box-shadow 0.25s;
 }
-main { flex: 1; }
-aside {
-    width: 180px;
-    background: var(--card);
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-aside h3 { margin-top: 0; font-size: 15px; color: var(--primary); }
-
-/* ===== CALCULATOR STYLES ===== */
-.card {
-    background: var(--card);
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
-    border: 1px solid var(--border);
-    margin-bottom: 25px;
-}
-h2 { margin: 0 0 8px; font-size: 24px; color: var(--primary); }
-.disclaimer { font-size: 13px; color: #64748b; }
-
-.row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-.field { flex: 1; min-width: 220px; }
-label { font-weight: 600; font-size: 14px; color: #334155; display: block; margin-bottom: 6px; }
-input {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 16px;
-}
-input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+input[type="url"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.2);
+  outline: none;
 }
 
-.section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 16px;
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
 }
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-.box {
-    background: #f8fafc;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-}
-.box-title { font-size: 13px; color: #64748b; }
-.box-value {
-    margin-top: 8px;
-    font-size: 20px;
-    font-weight: 700;
-}
-.success { color: var(--success); }
-.danger { color: var(--danger); }
-
-.ad-slot {
-    background: #e2e8f0;
-    text-align: center;
-    padding: 16px;
-    border-radius: 12px;
-    margin: 25px 0;
-    font-size: 14px;
-    color: #475569;
+button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-    .containerD { flex-direction: column; }
-    aside { width: 100%; }
-    .row { flex-direction: column; }
+/* RESULT */
+#result {
+  display: none;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
 }
-    </style>
+#result p:first-child {
+  color: var(--muted);
+  font-size: 14px;
+}
+.short-link-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+#shortLink {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+}
+.copy-btn {
+  background: rgba(14,165,233,0.1);
+  border: 1px solid rgba(14,165,233,0.2);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.copy-btn:hover {
+  background: rgba(14,165,233,0.2);
+}
+
+/* ADS GRID */
+.ad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.ad {
+  border-radius: 12px;
+  height: 90px;
+  background: linear-gradient(135deg, #e2e8f0, #f8fafc);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.ad:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(14,165,233,0.1);
+}
+
+/* REDIRECT OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+.redirect-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 32px 26px;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+}
+.redirect-box h2 {
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.percent {
+  font-size: 52px;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 10px 0;
+}
+.progress {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.progress > div {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.1s linear;
+  border-radius: 10px;
+}
+.large-ad {
+  height: 160px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 500px) {
+  h1 {
+    font-size: 22px;
+  }
+  .container {
+    padding: 28px 22px;
+  }
+  .large-ad {
+    height: 120px;
+  }
+}
+
+</style>
 </head>
-
 <body>
-<!-- HEADER -->
-    <header>
-        <h1>Stock Risk Calculator Pro</h1>
-    </header>
 
-    <!-- TOP NAV -->
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Tools</a>
-        <a href="#">Blog</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
+<div class="container">
+  <h1>TinyRedirect</h1>
+  <input id="urlInput" type="url" placeholder="Enter long URL (e.g. https://example.com)">
+  <button id="shortenBtn">Shorten</button>
 
-    <!-- HEADER AD -->
-    <div class="he-ad">
-        Header Ad Space (728×90)
+  <div id="result">
+    <p>Your short link:</p>
+    <div class="short-link-box">
+      <a id="shortLink" href="#"></a>
+      <button id="copyBtn" class="copy-btn">Copy</button>
     </div>
+    <p id="copyMsg" style="font-size:12px;color:var(--muted);margin-top:4px;display:none;">Copied!</p>
+  </div>
 
-    <div class="containerD">
-        <!-- LEFT SIDEBAR -->
-        <aside>
-            <h3>Quick Tools</h3>
-            <ul>
-                <li>📊 Risk Calculator</li>
-                <li>📈 Position Sizer</li>
-                <li>🎯 Target Calculator</li>
-                <li>💰 Portfolio Tracker</li>
-            </ul>
-        </aside>
+  <div class="ad-grid">
+    <!--ADS 1-->
+    <div class="ad skeleton">Ad Slot 1</div>
+    <div class="ad skeleton">Ad Slot 2</div>
+    <div class="ad skeleton">Ad Slot 3</div>
+    <div class="ad skeleton">Ad Slot 4</div>
+  </div>
+</div>
 
-        <!-- MAIN CONTENT -->
-        <main>
-            <div class="calculator-wrapper">
-                <div class="card">
-                    <h2>Stock Risk Calculator</h2>
-                    <div class="disclaimer">Educational tool only • Trading involves risk</div>
-                    
-                    <div class="row">
-                        <div class="field">
-                            <label>Entry Price (₹)</label>
-                            <input type="number" id="entry" value="12" step="0.01">
-                        </div>
-                        <div class="field">
-                            <label>Stop Loss (₹)</label>
-                            <input type="number" id="stop" value="8.36" step="0.01">
-                        </div>
-                        <div class="field">
-                            <label>Risk Amount (₹)</label>
-                            <input type="number" id="riskAmount" value="100">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">Responsive Ad Slot</div>
-
-                <!-- Position Summary -->
-                <div class="card">
-                    <div class="section-title">Position Summary</div>
-                    <div class="grid">
-                        <div class="box">
-                            <div class="box-title">Difference (Entry - SL)</div>
-                            <div class="box-value danger" id="difference"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">Quantity</div>
-                            <div class="box-value" id="quantity"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">Capital Needed</div>
-                            <div class="box-value" id="capital"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">
-                    <div class="desktopx">
-                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1407005444783172" data-ad-slot="9412459030" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                    </div>
-                </div>
-
-                <!-- TGT per Trade -->
-                <div class="card">
-                    <div class="section-title">TGT per Trade</div>
-                    <div class="grid">
-                        <div class="box"><div class="box-title">TGT 1</div><div class="box-value success" id="tgt1"></div></div>
-                        <div class="box"><div class="box-title">TGT 2</div><div class="box-value success" id="tgt2"></div></div>
-                        <div class="box"><div class="box-title">TGT 3</div><div class="box-value success" id="tgt3"></div></div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">Responsive Ad Slot</div>
-
-                <!-- Final Targets -->
-                <div class="card">
-                    <div class="section-title">Final Target Prices</div>
-                    <div class="grid">
-                        <div class="box"><div class="box-title">1st Target</div><div class="box-value success" id="final1"></div></div>
-                        <div class="box"><div class="box-title">2nd Target</div><div class="box-value success" id="final2"></div></div>
-                        <div class="box"><div class="box-title">3rd Target</div><div class="box-value success" id="final3"></div></div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- RIGHT SIDEBAR -->
-        <aside>
-            <h3>Market Snapshot</h3>
-            <p>Nifty • 22,345.67 <span style="color:#16a34a">↑ 1.24%</span></p>
-            <p>Bank Nifty • 48,912.45 <span style="color:#dc2626">↓ 0.45%</span></p>
-        </aside>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        © 2026 Stock Risk Calculator Pro • Educational Use Only
-    </footer>
+<!-- Redirect Overlay -->
+<div class="overlay" id="overlay">
+  <div class="redirect-box">
+    <h2>Reaching to target URL</h2>
+    <div class="percent" id="percent">0%</div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="large-ad skeleton">Responsive Ad Slot</div>
+    <footer>Redirecting after ad finishes...</footer>
+  </div>
+</div>
 
 <script>
-// INR Formatter
-function formatINR(value) {
-    return new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR'
-    }).format(value);
+(function(){
+"use strict";
+const btn = document.getElementById('shortenBtn');
+const input = document.getElementById('urlInput');
+const result = document.getElementById('result');
+const shortLink = document.getElementById('shortLink');
+const overlay = document.getElementById('overlay');
+const percentEl = document.getElementById('percent');
+const bar = document.getElementById('bar');
+const copyBtn = document.getElementById('copyBtn');
+const copyMsg = document.getElementById('copyMsg');
+const origin = location.origin + location.pathname;
+
+/* Base64 safe encode/decode */
+function encodeURL(url){
+  return btoa(unescape(encodeURIComponent(url)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeURL(str){
+  try{
+    str = str.replace(/-/g,'+').replace(/_/g,'/');
+    return decodeURIComponent(escape(atob(str)));
+  }catch(e){
+    return null;
+  }
 }
 
-function calculate() {
-    let entry = parseFloat(document.getElementById("entry").value) || 0;
-    let stop = parseFloat(document.getElementById("stop").value) || 0;
-    let riskAmount = parseFloat(document.getElementById("riskAmount").value) || 0;
+/* Shorten button */
+btn.addEventListener('click', () => {
+  let longURL = input.value.trim();
+  if (!longURL) return alert("Please enter a URL!");
+  if (!/^https?:\/\//i.test(longURL)) longURL = "https://" + longURL;
 
-    let difference = Math.abs(entry - stop);
-    let quantity = difference > 0 ? riskAmount / difference : 0;
-    let capital = quantity * entry;
+  const encoded = encodeURL(longURL);
+  const short = `${origin}#r=${encoded}`;
 
-    document.getElementById("difference").innerText = formatINR(difference);
-    document.getElementById("quantity").innerText = quantity.toFixed(4);
-    document.getElementById("capital").innerText = formatINR(capital);
-
-    document.getElementById("tgt1").innerText = formatINR(difference * 1);
-    document.getElementById("tgt2").innerText = formatINR(difference * 2);
-    document.getElementById("tgt3").innerText = formatINR(difference * 3);
-
-    document.getElementById("final1").innerText = formatINR(entry + difference * 1);
-    document.getElementById("final2").innerText = formatINR(entry + difference * 2);
-    document.getElementById("final3").innerText = formatINR(entry + difference * 3);
-}
-
-// Live calculation
-document.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", calculate);
+  shortLink.href = short;
+  shortLink.textContent = short;
+  result.style.display = 'block';
 });
 
-// Initial run
-calculate();
+/* Copy button */
+copyBtn.addEventListener('click', () => {
+  const text = shortLink.textContent;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    copyMsg.style.display = 'block';
+    setTimeout(()=>copyMsg.style.display='none',1500);
+  });
+});
+
+/* Redirect animation */
+function startRedirect(target){
+  overlay.style.display = "flex";
+  let progress = 0;
+  const tick = setInterval(()=>{
+    progress++;
+    percentEl.textContent = progress + "%";
+    bar.style.width = progress + "%";
+    if(progress >= 100){
+      clearInterval(tick);
+      window.location.href = target;
+    }
+  },100); // 100% in 10s
+}
+
+/* If #r= exists, redirect */
+const match = location.hash.match(/#r=([^&]+)/);
+if(match){
+  const target = decodeURL(match[1]);
+  if(target) setTimeout(()=>startRedirect(target),500);
+}
+
+/* Skeleton fade out */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.querySelectorAll('.skeleton').forEach(el=>el.classList.remove('skeleton'));
+  },600);
+});
+})();
 </script>
 </body>
-
 </html>
