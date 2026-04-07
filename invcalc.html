@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groww Calculators - All in One</title>
+  <style>
+    :root {
+      --primary: #00d09c;
+      --dark: #1e1e1e;
+      --light: #f8f9fa;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--dark);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+    h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      outline: none;
+    }
+    .search-bar input:focus { border-color: var(--primary); }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .tab {
+      padding: 10px 20px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .calculators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card-header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button:hover { background: #00b886; }
+
+    .result {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f0fff9;
+      border-radius: 8px;
+      border-left: 5px solid var(--primary);
+      font-size: 1.1rem;
+    }
+    .result strong { color: #006d4f; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Groww Calculators</h1>
+  <p class="subtitle">All Financial Calculators in One Place</p>
+</header>
+
+<div class="container">
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search calculators... (SIP, EMI, Tax, etc.)" onkeyup="filterCalculators()">
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="filterByCategory('all')">All</div>
+    <div class="tab" onclick="filterByCategory('investment')">Investment</div>
+    <div class="tab" onclick="filterByCategory('loan')">Loan / EMI</div>
+    <div class="tab" onclick="filterByCategory('retirement')">Retirement</div>
+    <div class="tab" onclick="filterByCategory('tax')">Tax</div>
+    <div class="tab" onclick="filterByCategory('savings')">Savings Schemes</div>
+  </div>
+
+  <div class="calculators-grid" id="calculatorsGrid">
+    <!-- Calculators will be injected by JavaScript -->
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 Groww Calculators Clone • Built with HTML, CSS &amp; JavaScript
+</footer>
+
+<script>
+// All calculators data
+const calculators = [
+  {
+    id: "sip",
+    name: "SIP Calculator",
+    category: "investment",
+    html: `
+      <div class="form-group"><label>Monthly SIP Amount (₹)</label><input type="number" id="sipAmount" value="5000"></div>
+      <div class="form-group"><label>Expected Return (% p.a.)</label><input type="number" id="sipRate" value="12" step="0.1"></div>
+      <div class="form-group"><label>Time Period (Years)</label><input type="number" id="sipYears" value="10"></div>
+      <button onclick="calculateSIP()">Calculate</button>
+      <div class="result" id="sipResult"></div>
+    `
+  },
+  {
+    id: "lumpsum",
+    name: "Lumpsum Calculator",
+    category: "investment",
+    html: `
+      <div class="form-group"><label>Investment Amount (₹)</label><input type="number" id="lumpAmount" value="100000"></div>
+      <div class="form-group"><label>Expected Return (% p.a.)</label><input type="number" id="lumpRate" value="12" step="0.1"></div>
+      <div class="form-group"><label>Time Period (Years)</label><input type="number" id="lumpYears" value="10"></div>
+      <button onclick="calculateLumpsum()">Calculate</button>
+      <div class="result" id="lumpResult"></div>
+    `
+  },
+  {
+    id: "swp",
+    name: "SWP Calculator",
+    category: "investment",
+    html: `
+      <div class="form-group"><label>Initial Investment (₹)</label><input type="number" id="swpAmount" value="1000000"></div>
+      <div class="form-group"><label>Monthly Withdrawal (₹)</label><input type="number" id="swpWithdraw" value="10000"></div>
+      <div class="form-group"><label>Expected Return (% p.a.)</label><input type="number" id="swpRate" value="10" step="0.1"></div>
+      <div class="form-group"><label>Time Period (Years)</label><input type="number" id="swpYears" value="10"></div>
+      <button onclick="calculateSWP()">Calculate</button>
+      <div class="result" id="swpResult"></div>
+    `
+  },
+  {
+    id: "emi",
+    name: "EMI Calculator",
+    category: "loan",
+    html: `
+      <div class="form-group"><label>Loan Amount (₹)</label><input type="number" id="emiPrincipal" value="500000"></div>
+      <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="emiRate" value="8.5" step="0.1"></div>
+      <div class="form-group"><label>Tenure (Years)</label><input type="number" id="emiTenure" value="5"></div>
+      <button onclick="calculateEMI()">Calculate EMI</button>
+      <div class="result" id="emiResult"></div>
+    `
+  },
+  {
+    id: "retirement",
+    name: "Retirement Calculator",
+    category: "retirement",
+    html: `
+      <div class="form-group"><label>Current Age</label><input type="number" id="retAge" value="30"></div>
+      <div class="form-group"><label>Retirement Age</label><input type="number" id="retRetAge" value="60"></div>
+      <div class="form-group"><label>Monthly Expense Today (₹)</label><input type="number" id="retExpense" value="50000"></div>
+      <div class="form-group"><label>Inflation (% p.a.)</label><input type="number" id="retInflation" value="6" step="0.1"></div>
+      <div class="form-group"><label>Expected Return (% p.a.)</label><input type="number" id="retReturn" value="12" step="0.1"></div>
+      <button onclick="calculateRetirement()">Calculate</button>
+      <div class="result" id="retResult"></div>
+    `
+  },
+  {
+    id: "cagr",
+    name: "CAGR Calculator",
+    category: "investment",
+    html: `
+      <div class="form-group"><label>Beginning Value (₹)</label><input type="number" id="cagrBegin" value="100000"></div>
+      <div class="form-group"><label>Ending Value (₹)</label><input type="number" id="cagrEnd" value="500000"></div>
+      <div class="form-group"><label>Number of Years</label><input type="number" id="cagrYears" value="10"></div>
+      <button onclick="calculateCAGR()">Calculate CAGR</button>
+      <div class="result" id="cagrResult"></div>
+    `
+  },
+  {
+    id: "ppf",
+    name: "PPF Calculator",
+    category: "savings",
+    html: `
+      <div class="form-group"><label>Annual Investment (₹)</label><input type="number" id="ppfAmount" value="150000"></div>
+      <div class="form-group"><label>Time Period (Years)</label><input type="number" id="ppfYears" value="15"></div>
+      <button onclick="calculatePPF()">Calculate</button>
+      <div class="result" id="ppfResult"></div>
+    `
+  },
+  {
+    id: "fd",
+    name: "FD Calculator",
+    category: "savings",
+    html: `
+      <div class="form-group"><label>Deposit Amount (₹)</label><input type="number" id="fdAmount" value="100000"></div>
+      <div class="form-group"><label>Interest Rate (% p.a.)</label><input type="number" id="fdRate" value="6.5" step="0.1"></div>
+      <div class="form-group"><label>Tenure (Years)</label><input type="number" id="fdYears" value="5"></div>
+      <button onclick="calculateFD()">Calculate</button>
+      <div class="result" id="fdResult"></div>
+    `
+  },
+  {
+    id: "income-tax",
+    name: "Income Tax Calculator",
+    category: "tax",
+    html: `
+      <div class="form-group"><label>Annual Income (₹)</label><input type="number" id="taxIncome" value="1200000"></div>
+      <button onclick="calculateTax()">Calculate Tax (Old Regime Approx.)</button>
+      <div class="result" id="taxResult"></div>
+    `
+  },
+  {
+    id: "gst",
+    name: "GST Calculator",
+    category: "tax",
+    html: `
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="gstAmount" value="10000"></div>
+      <div class="form-group"><label>GST Rate (%)</label>
+        <select id="gstRate">
+          <option value="5">5%</option>
+          <option value="12" selected>12%</option>
+          <option value="18">18%</option>
+          <option value="28">28%</option>
+        </select>
+      </div>
+      <button onclick="calculateGST()">Calculate</button>
+      <div class="result" id="gstResult"></div>
+    `
+  },
+  // Add more calculators as needed (compound interest, gratuity, etc.)
+];
+
+function renderCalculators(filtered) {
+  const grid = document.getElementById("calculatorsGrid");
+  grid.innerHTML = "";
+
+  filtered.forEach(calc => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-header">${calc.name}</div>
+      <div class="card-body">
+        ${calc.html}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function filterCalculators() {
+  const term = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = calculators.filter(c => 
+    c.name.toLowerCase().includes(term)
+  );
+  renderCalculators(filtered);
+}
+
+function filterByCategory(cat) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  event.currentTarget.classList.add("active");
+
+  let filtered;
+  if (cat === "all") {
+    filtered = calculators;
+  } else {
+    filtered = calculators.filter(c => c.category === cat);
+  }
+  renderCalculators(filtered);
+}
+
+// ======================
+// Calculation Functions
+// ======================
+
+function calculateSIP() {
+  const p = parseFloat(document.getElementById("sipAmount").value);
+  const r = parseFloat(document.getElementById("sipRate").value) / 100 / 12;
+  const n = parseFloat(document.getElementById("sipYears").value) * 12;
+
+  if (!p || !r || !n) return;
+  const fv = p * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+  const invested = p * n;
+  const resultDiv = document.getElementById("sipResult");
+  resultDiv.innerHTML = `
+    <strong>Future Value:</strong> ₹${fv.toLocaleString('en-IN')}<br>
+    <strong>Total Invested:</strong> ₹${invested.toLocaleString('en-IN')}<br>
+    <strong>Estimated Returns:</strong> ₹${(fv - invested).toLocaleString('en-IN')}
+  `;
+}
+
+function calculateLumpsum() {
+  const p = parseFloat(document.getElementById("lumpAmount").value);
+  const r = parseFloat(document.getElementById("lumpRate").value) / 100;
+  const t = parseFloat(document.getElementById("lumpYears").value);
+
+  const fv = p * Math.pow(1 + r, t);
+  const resultDiv = document.getElementById("lumpResult");
+  resultDiv.innerHTML = `<strong>Maturity Amount:</strong> ₹${fv.toLocaleString('en-IN')}`;
+}
+
+function calculateSWP() {
+  // Simplified SWP (remaining balance after withdrawals)
+  const init = parseFloat(document.getElementById("swpAmount").value);
+  const withdraw = parseFloat(document.getElementById("swpWithdraw").value);
+  const r = parseFloat(document.getElementById("swpRate").value) / 1200;
+  const months = parseFloat(document.getElementById("swpYears").value) * 12;
+
+  let balance = init;
+  for (let i = 0; i < months; i++) {
+    balance = balance * (1 + r) - withdraw;
+    if (balance < 0) break;
+  }
+  const resultDiv = document.getElementById("swpResult");
+  resultDiv.innerHTML = `<strong>Remaining Balance:</strong> ₹${Math.max(0, balance).toLocaleString('en-IN')}`;
+}
+
+function calculateEMI() {
+  const p = parseFloat(document.getElementById("emiPrincipal").value);
+  const annualRate = parseFloat(document.getElementById("emiRate").value);
+  const years = parseFloat(document.getElementById("emiTenure").value);
+
+  const r = annualRate / 1200;
+  const n = years * 12;
+  const emi = p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+
+  const resultDiv = document.getElementById("emiResult");
+  resultDiv.innerHTML = `<strong>Monthly EMI:</strong> ₹${emi.toFixed(0).toLocaleString('en-IN')}`;
+}
+
+function calculateRetirement() {
+  const currentAge = parseFloat(document.getElementById("retAge").value);
+  const retAge = parseFloat(document.getElementById("retRetAge").value);
+  const monthlyExpense = parseFloat(document.getElementById("retExpense").value);
+  const inflation = parseFloat(document.getElementById("retInflation").value) / 100;
+  const returnRate = parseFloat(document.getElementById("retReturn").value) / 100;
+
+  const yearsToRet = retAge - currentAge;
+  const futureExpense = monthlyExpense * Math.pow(1 + inflation, yearsToRet);
+  const corpusNeeded = futureExpense * 12 / (returnRate - inflation); // very simplified 4% rule variant
+
+  const resultDiv = document.getElementById("retResult");
+  resultDiv.innerHTML = `
+    <strong>Monthly Expense at Retirement:</strong> ₹${futureExpense.toFixed(0).toLocaleString('en-IN')}<br>
+    <strong>Corpus Required:</strong> ₹${corpusNeeded.toFixed(0).toLocaleString('en-IN')}
+  `;
+}
+
+function calculateCAGR() {
+  const begin = parseFloat(document.getElementById("cagrBegin").value);
+  const end = parseFloat(document.getElementById("cagrEnd").value);
+  const years = parseFloat(document.getElementById("cagrYears").value);
+
+  const cagr = (Math.pow(end / begin, 1 / years) - 1) * 100;
+  const resultDiv = document.getElementById("cagrResult");
+  resultDiv.innerHTML = `<strong>CAGR:</strong> ${cagr.toFixed(2)}%`;
+}
+
+function calculatePPF() {
+  const annual = parseFloat(document.getElementById("ppfAmount").value);
+  const years = parseFloat(document.getElementById("ppfYears").value);
+  // Approximate PPF at 7.1%
+  const rate = 0.071;
+  let maturity = 0;
+  for (let i = 1; i <= years; i++) {
+    maturity = (maturity + annual) * (1 + rate);
+  }
+  const resultDiv = document.getElementById("ppfResult");
+  resultDiv.innerHTML = `<strong>Maturity Amount:</strong> ₹${maturity.toFixed(0).toLocaleString('en-IN')}`;
+}
+
+function calculateFD() {
+  const p = parseFloat(document.getElementById("fdAmount").value);
+  const r = parseFloat(document.getElementById("fdRate").value) / 100;
+  const t = parseFloat(document.getElementById("fdYears").value);
+
+  const maturity = p * Math.pow(1 + r, t);
+  const resultDiv = document.getElementById("fdResult");
+  resultDiv.innerHTML = `<strong>Maturity Amount:</strong> ₹${maturity.toFixed(0).toLocaleString('en-IN')}`;
+}
+
+function calculateTax() {
+  const income = parseFloat(document.getElementById("taxIncome").value);
+  let tax = 0;
+  if (income > 1500000) tax = 112500 + (income - 1500000) * 0.3;
+  else if (income > 1200000) tax = 75000 + (income - 1200000) * 0.25;
+  // ... simplified old regime
+  const resultDiv = document.getElementById("taxResult");
+  resultDiv.innerHTML = `<strong>Approximate Tax Liability:</strong> ₹${tax.toFixed(0).toLocaleString('en-IN')}`;
+}
+
+function calculateGST() {
+  const amt = parseFloat(document.getElementById("gstAmount").value);
+  const rate = parseFloat(document.getElementById("gstRate").value) / 100;
+  const gst = amt * rate;
+  const total = amt + gst;
+  const resultDiv = document.getElementById("gstResult");
+  resultDiv.innerHTML = `
+    <strong>GST Amount:</strong> ₹${gst.toFixed(2)}<br>
+    <strong>Total Amount:</strong> ₹${total.toFixed(2)}
+  `;
+}
+
+// Initial render
+renderCalculators(calculators);
+</script>
+
+</body>
+</html>
