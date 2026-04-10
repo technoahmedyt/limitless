@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAGR Calculator</title>
+
+    <style>
+        :root {
+            --primary: #00d09c;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* CARD */
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* INPUT */
+        label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 208, 156, 0.3);
+        }
+
+        /* RESULT */
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0fff9;
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result strong {
+            font-size: 20px;
+            color: #006d4f;
+        }
+
+        /* MOBILE */
+        @media(max-width:400px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>CAGR Calculator</h2>
+
+        <label>Initial Investment (₹)</label>
+        <input type="number" id="startValue" placeholder="e.g. 100000">
+
+        <label>Final Value (₹)</label>
+        <input type="number" id="endValue" placeholder="e.g. 200000">
+
+        <label>Time Period (Years)</label>
+        <input type="number" id="years" placeholder="e.g. 5">
+
+        <div class="result" id="result">
+            CAGR: <strong>0%</strong>
+        </div>
+    </div>
+
+    <script>
+        const start = document.getElementById("startValue");
+        const end = document.getElementById("endValue");
+        const years = document.getElementById("years");
+        const result = document.getElementById("result");
+
+        function calculateCAGR() {
+            const p = parseFloat(start.value);
+            const fv = parseFloat(end.value);
+            const t = parseFloat(years.value);
+
+            if (p > 0 && fv > 0 && t > 0) {
+                const cagr = (Math.pow(fv / p, 1 / t) - 1) * 100;
+                result.innerHTML = `CAGR: <strong>${cagr.toFixed(2)}%</strong>`;
+            } else {
+                result.innerHTML = `CAGR: <strong>0%</strong>`;
+            }
+        }
+
+        /* AUTO CALCULATE */
+        start.addEventListener("input", calculateCAGR);
+        end.addEventListener("input", calculateCAGR);
+        years.addEventListener("input", calculateCAGR);
+    </script>
+
+</body>
+
+</html>
