@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Valuation Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c14;
+  --card: #111827;
+  --card-light: #1f2937;
+  --primary: #6366f1;
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #334155;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px 15px;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6366f1, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.main-card {
+  background: var(--card);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #1e2937;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  background: #27344a;
+}
+
+.btn-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+button {
+  padding: 15px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.02rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #334155;
+  color: white;
+  flex: 0.4;
+}
+
+.btn-secondary:hover {
+  background: #475569;
+}
+
+/* Result Cards - Professional Design */
+.result-card {
+  background: var(--card-light);
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-header h3 {
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.delete-btn {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--red);
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  transform: scale(1.1);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.metric {
+  background: rgba(15, 23, 42, 0.6);
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.metric-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.verdict-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.badge {
+  padding: 8px 20px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.buy { background: rgba(16, 185, 129, 0.2); color: var(--green); }
+.sell { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+.hold { background: rgba(245, 158, 11, 0.2); color: var(--yellow); }
+
+.warning {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 10px;
+  border-left: 4px solid #fbbf24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 2.1rem; }
+  .main-card { padding: 24px 20px; }
+  .grid { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  .result-card { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+  body { padding: 15px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Stock Valuation Pro</h1>
+    <p class="subtitle">Multi-Model Intrinsic Value Analysis</p>
+  </header>
+
+  <div class="main-card">
+    <div class="grid">
+      <input id="name" placeholder="Stock Name / Ticker">
+      <input id="price" type="number" placeholder="Market Price">
+      <input id="eps" type="number" placeholder="EPS">
+      <input id="bvps" type="number" placeholder="BVPS">
+      <input id="growth" type="number" placeholder="Growth %">
+      <input id="fcf" type="number" placeholder="Free Cash Flow">
+      <input id="discount" type="number" placeholder="Discount Rate %">
+    </div>
+
+    <div class="btn-container">
+      <button class="btn-primary" onclick="calculate()">Calculate Valuation</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear All</button>
+    </div>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("stocks")) || [];
+
+function save(){
+  localStorage.setItem("stocks", JSON.stringify(data));
+}
+
+function calculate(){
+  const name = document.getElementById("name").value.trim();
+  const price = parseFloat(document.getElementById("price").value);
+  const eps = parseFloat(document.getElementById("eps").value);
+  const bvps = parseFloat(document.getElementById("bvps").value);
+  const growth = parseFloat(document.getElementById("growth").value);
+  const fcf = parseFloat(document.getElementById("fcf").value);
+  const discount = parseFloat(document.getElementById("discount").value);
+
+  if(!name || [price,eps,bvps,growth,fcf,discount].some(v => isNaN(v))){
+    alert("Please enter valid inputs for all fields");
+    return;
+  }
+
+  // Graham
+  const graham = Math.sqrt(22.5 * eps * bvps);
+  // Growth Formula
+  const growthVal = eps * (8.5 + 2 * growth);
+  // DCF
+  let dcf = 0;
+  let cash = fcf;
+  for(let i=1; i<=5; i++){
+    cash *= (1 + growth/100);
+    dcf += cash / Math.pow(1 + discount/100, i);
+  }
+  // Ratios
+  const pe = price / eps;
+  const peg = growth > 0 ? pe / growth : 0;
+  // Intrinsic Average
+  const intrinsic = (graham + growthVal + dcf) / 3;
+  const mos = ((intrinsic - price)/intrinsic)*100;
+
+  // Decision
+  let buyCount = 0;
+  if(graham > price) buyCount++;
+  if(growthVal > price) buyCount++;
+  if(dcf > price) buyCount++;
+
+  let verdict="HOLD", className="hold";
+  if(buyCount>=2){ verdict="BUY"; className="buy"; }
+  if(buyCount===0){ verdict="SELL"; className="sell"; }
+
+  const confidence = buyCount===3 ? "High" : buyCount===2 ? "Medium" : "Low";
+
+  // Warning system
+  let warning="";
+  if(growth>25) warning="⚠️ Growth rate seems very high and may be unrealistic";
+  if(discount<8) warning="⚠️ Discount rate is quite low";
+
+  const obj = {
+    name, price, graham, growthVal, dcf, peg, mos, intrinsic,
+    verdict, className, confidence, warning
+  };
+
+  data.unshift(obj);
+  save();
+  render();
+
+  // Auto clear form
+  document.querySelectorAll("input").forEach(i => i.value = "");
+}
+
+function render(){
+  const container = document.getElementById("results");
+  container.innerHTML = "";
+
+  if(data.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:60px; color:var(--muted);">
+      <h3>No valuations yet</h3>
+      <p>Fill the form and calculate to see results</p>
+    </div>`;
+    return;
+  }
+
+  data.forEach((d, i) => {
+    container.innerHTML += `
+    <div class="result-card">
+      <div class="result-header">
+        <h3>${d.name}</h3>
+        <button class="delete-btn" onclick="deleteCard(${i})">✕</button>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Market Price</div>
+          <div class="metric-value">₹${d.price.toLocaleString('en-IN')}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Graham Value</div>
+          <div class="metric-value">₹${d.graham.toFixed(2)}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Growth Value</div>
+          <div class="metric-value">₹${d.growthVal.toFixed(2)}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">5-Year DCF</div>
+          <div class="metric-value">₹${d.dcf.toFixed(2)}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Average Intrinsic Value</div>
+          <div class="metric-value">₹${d.intrinsic.toFixed(2)}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">PEG Ratio</div>
+          <div class="metric-value">${d.peg.toFixed(2)}</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Margin of Safety</div>
+        <div class="metric-value ${d.mos > 0 ? 'text-green' : 'text-red'}">
+          ${d.mos.toFixed(2)}%
+        </div>
+      </div>
+
+      <div class="verdict-section">
+        <span class="badge ${d.className}">${d.verdict}</span>
+        <span class="badge" style="background:rgba(99,102,241,0.15); color:#a5b4fc;">
+          ${d.confidence} Confidence
+        </span>
+      </div>
+
+      ${d.warning ? `<div class="warning">${d.warning}</div>` : ""}
+    </div>
+    `;
+  });
+}
+
+function deleteCard(i){
+  if(confirm("Delete this valuation?")){
+    data.splice(i,1);
+    save();
+    render();
+  }
+}
+
+function clearAll(){
+  if(confirm("Clear all saved valuations?")){
+    data = [];
+    save();
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
