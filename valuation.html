@@ -1,432 +1,986 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stock Valuation Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0a0c14;
-  --card: #111827;
-  --card-light: #1f2937;
-  --primary: #6366f1;
-  --green: #10b981;
-  --red: #ef4444;
-  --yellow: #f59e0b;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --border: #334155;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value Scout — Stock Analyzer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0c10;
+            --surface: #111418;
+            --surface2: #181c22;
+            --border: #1f2530;
+            --text: #e8edf5;
+            --muted: #5a6478;
+            --accent: #00e5a0;
+            --accent2: #0088ff;
+            --warn: #ff9500;
+            --danger: #ff3b55;
+            --strong-buy: #00e5a0;
+            --buy: #4ade80;
+            --hold: #facc15;
+            --sell: #f87171;
+        }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  padding: 20px 15px;
-  min-height: 100vh;
-  line-height: 1.6;
-}
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            min-height: 100vh;
+            padding: 24px 16px 48px;
+            background-image:
+                radial-gradient(ellipse 60% 40% at 80% -10%, rgba(0, 229, 160, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 20% 110%, rgba(0, 136, 255, 0.05) 0%, transparent 60%);
+        }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
 
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
 
-h1 {
-  font-size: 2.6rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #6366f1, #a5b4fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
-}
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--accent);
+        }
 
-.subtitle {
-  color: var(--muted);
-  font-size: 1.1rem;
-}
+        .logo span {
+            color: var(--muted);
+            font-weight: 400;
+        }
 
-.main-card {
-  background: var(--card);
-  padding: 32px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  margin-bottom: 40px;
-}
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
+        /* INPUT SECTION */
+        .input-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 28px;
+        }
 
-input {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #1e2937;
-  color: white;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 18px;
+        }
 
-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  background: #27344a;
-}
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
 
-.btn-container {
-  display: flex;
-  gap: 12px;
-  margin-top: 28px;
-}
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-button {
-  padding: 15px 24px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1.02rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+        .field-group label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  flex: 1;
-}
+        .field-group input,
+        .field-group select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
 
-.btn-primary:hover {
-  background: #4f46e5;
-  transform: translateY(-2px);
-}
+        .field-group input:focus,
+        .field-group select:focus {
+            border-color: var(--accent);
+        }
 
-.btn-secondary {
-  background: #334155;
-  color: white;
-  flex: 0.4;
-}
+        .field-group select option {
+            background: var(--surface2);
+        }
 
-.btn-secondary:hover {
-  background: #475569;
-}
+        .action-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
 
-/* Result Cards - Professional Design */
-.result-card {
-  background: var(--card-light);
-  border-radius: 18px;
-  padding: 24px;
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
+        .btn-analyze {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 28px;
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
 
-.result-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
+        .btn-analyze:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
 
-.result-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
+        .btn-analyze:active {
+            transform: translateY(0);
+        }
 
-.result-header h3 {
-  font-size: 1.45rem;
-  font-weight: 700;
-}
+        .btn-clear {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            padding: 12px 20px;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
 
-.delete-btn {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--red);
-  border: none;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
+        .btn-clear:hover {
+            border-color: var(--muted);
+            color: var(--text);
+        }
 
-.delete-btn:hover {
-  background: rgba(239, 68, 68, 0.3);
-  transform: scale(1.1);
-}
+        /* RESULTS */
+        #results {
+            display: none;
+        }
 
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin: 20px 0;
-}
+        .verdict-card {
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            animation: fadeIn 0.4s ease;
+        }
 
-.metric {
-  background: rgba(15, 23, 42, 0.6);
-  padding: 14px 16px;
-  border-radius: 12px;
-}
+        .verdict-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            pointer-events: none;
+        }
 
-.metric-label {
-  font-size: 0.82rem;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
+        .verdict-STRONG_BUY {
+            background: rgba(0, 229, 160, 0.08);
+            border-color: rgba(0, 229, 160, 0.3);
+        }
 
-.metric-value {
-  font-size: 1.15rem;
-  font-weight: 600;
-}
+        .verdict-BUY {
+            background: rgba(74, 222, 128, 0.07);
+            border-color: rgba(74, 222, 128, 0.25);
+        }
 
-.verdict-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-}
+        .verdict-HOLD {
+            background: rgba(250, 204, 21, 0.07);
+            border-color: rgba(250, 204, 21, 0.25);
+        }
 
-.badge {
-  padding: 8px 20px;
-  border-radius: 9999px;
-  font-weight: 600;
-  font-size: 0.98rem;
-}
+        .verdict-SELL {
+            background: rgba(248, 113, 113, 0.07);
+            border-color: rgba(248, 113, 113, 0.25);
+        }
 
-.buy { background: rgba(16, 185, 129, 0.2); color: var(--green); }
-.sell { background: rgba(239, 68, 68, 0.2); color: var(--red); }
-.hold { background: rgba(245, 158, 11, 0.2); color: var(--yellow); }
+        .verdict-OVERVALUED {
+            background: rgba(255, 59, 85, 0.07);
+            border-color: rgba(255, 59, 85, 0.25);
+        }
 
-.warning {
-  color: #fbbf24;
-  font-size: 0.9rem;
-  margin-top: 12px;
-  padding: 10px 14px;
-  background: rgba(251, 191, 36, 0.1);
-  border-radius: 10px;
-  border-left: 4px solid #fbbf24;
-}
+        .verdict-left {}
 
-/* Responsive */
-@media (max-width: 768px) {
-  h1 { font-size: 2.1rem; }
-  .main-card { padding: 24px 20px; }
-  .grid { grid-template-columns: 1fr; }
-  .metrics { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-  .result-card { padding: 20px; }
-}
+        .stock-name-display {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
 
-@media (max-width: 480px) {
-  body { padding: 15px 10px; }
-}
-</style>
+        .verdict-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .verdict-badge {
+            font-size: 22px;
+            font-weight: 800;
+            padding: 12px 24px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .badge-STRONG_BUY {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--strong-buy);
+        }
+
+        .badge-BUY {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--buy);
+        }
+
+        .badge-HOLD {
+            background: rgba(250, 204, 21, 0.15);
+            color: var(--hold);
+        }
+
+        .badge-SELL {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--sell);
+        }
+
+        .badge-OVERVALUED {
+            background: rgba(255, 59, 85, 0.12);
+            color: var(--danger);
+        }
+
+        /* METRICS GRID */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.5s ease 0.1s both;
+        }
+
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--muted);
+        }
+
+        .metric-card.highlight {
+            border-color: rgba(0, 229, 160, 0.35);
+        }
+
+        .metric-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.5px;
+        }
+
+        .metric-note {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            margin-top: 4px;
+            color: var(--muted);
+        }
+
+        .green {
+            color: var(--accent);
+        }
+
+        .yellow {
+            color: var(--warn);
+        }
+
+        .red {
+            color: var(--danger);
+        }
+
+        .blue {
+            color: var(--accent2);
+        }
+
+        /* PRICE BAND */
+        .price-band-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.5s ease 0.2s both;
+        }
+
+        .band-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .price-track-wrap {
+            padding: 0 0 8px;
+        }
+
+        .price-labels {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .price-track {
+            height: 8px;
+            border-radius: 99px;
+            background: linear-gradient(to right,
+                    rgba(0, 229, 160, 0.9) 0%,
+                    rgba(0, 229, 160, 0.6) 20%,
+                    rgba(74, 222, 128, 0.5) 35%,
+                    rgba(250, 204, 21, 0.5) 50%,
+                    rgba(255, 149, 0, 0.5) 65%,
+                    rgba(255, 59, 85, 0.6) 85%,
+                    rgba(255, 59, 85, 0.9) 100%);
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .price-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 0 2px #fff;
+            z-index: 2;
+        }
+
+        .price-zone-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* INSIGHTS */
+        .insights-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            animation: fadeIn 0.5s ease 0.3s both;
+        }
+
+        .insights-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .insight-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .insight-row:last-child {
+            border-bottom: none;
+        }
+
+        .insight-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .dot-green {
+            background: var(--accent);
+        }
+
+        .dot-yellow {
+            background: var(--warn);
+        }
+
+        .dot-red {
+            background: var(--danger);
+        }
+
+        .dot-blue {
+            background: var(--accent2);
+        }
+
+        /* STOCK LIST */
+        .stocks-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+        }
+
+        .stocks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stocks-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+        }
+
+        .btn-add-stock {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-stock:hover {
+            border-color: var(--accent);
+            background: rgba(0, 229, 160, 0.06);
+        }
+
+        .stocks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .stocks-table th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stocks-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(31, 37, 48, 0.6);
+            font-family: 'JetBrains Mono', monospace;
+            vertical-align: middle;
+        }
+
+        .stocks-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stocks-table tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .stocks-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .decision-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .pill-STRONG_BUY {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--strong-buy);
+        }
+
+        .pill-BUY {
+            background: rgba(74, 222, 128, 0.12);
+            color: var(--buy);
+        }
+
+        .pill-HOLD {
+            background: rgba(250, 204, 21, 0.12);
+            color: var(--hold);
+        }
+
+        .pill-SELL,
+        .pill-OVERVALUED {
+            background: rgba(255, 59, 85, 0.12);
+            color: var(--danger);
+        }
+
+        .del-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s, background 0.15s;
+        }
+
+        .del-btn:hover {
+            color: var(--danger);
+            background: rgba(255, 59, 85, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 28px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Fundamentals toggle */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .toggle-row input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .toggle-row label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        @media (max-width: 600px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .verdict-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stocks-table th:nth-child(3),
+            .stocks-table td:nth-child(3),
+            .stocks-table th:nth-child(4),
+            .stocks-table td:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="container">
-  <header>
-    <h1>Stock Valuation Pro</h1>
-    <p class="subtitle">Multi-Model Intrinsic Value Analysis</p>
-  </header>
+    <div class="container">
+        <header>
+            <div class="logo">Value<span>Scout</span></div>
+            <div class="tagline">Intrinsic Value · Margin of Safety</div>
+        </header>
 
-  <div class="main-card">
-    <div class="grid">
-      <input id="name" placeholder="Stock Name / Ticker">
-      <input id="price" type="number" placeholder="Market Price">
-      <input id="eps" type="number" placeholder="EPS">
-      <input id="bvps" type="number" placeholder="BVPS">
-      <input id="growth" type="number" placeholder="Growth %">
-      <input id="fcf" type="number" placeholder="Free Cash Flow">
-      <input id="discount" type="number" placeholder="Discount Rate %">
+        <!-- INPUT -->
+        <div class="input-section">
+            <div class="section-label">▸ Analyze Stock</div>
+            <div class="fields-grid">
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Stock Name</label>
+                    <input type="text" id="stockName" placeholder="e.g. Central Bank of India" />
+                </div>
+                <div class="field-group">
+                    <label>Intrinsic Value (IV) ₹</label>
+                    <input type="number" id="iv" placeholder="58.1" step="0.01" min="0" />
+                </div>
+                <div class="field-group">
+                    <label>Current Market Price (CMP) ₹</label>
+                    <input type="number" id="cmp" placeholder="36" step="0.01" min="0" />
+                </div>
+                <div class="field-group">
+                    <label>Margin of Safety (MOS %)</label>
+                    <input type="number" id="mos" placeholder="30" step="1" min="0" max="90" />
+                </div>
+                <div class="field-group">
+                    <label>Fundamentals</label>
+                    <select id="fundamentals">
+                        <option value="yes">✅ OK — Good fundamentals</option>
+                        <option value="no">❌ Not OK — Weak fundamentals</option>
+                        <option value="neutral">⚠️ Neutral / Unclear</option>
+                    </select>
+                </div>
+            </div>
+            <div class="action-row">
+                <button class="btn-analyze" onclick="analyzeStock()">Analyze →</button>
+                <button class="btn-clear" onclick="clearResults()">Clear</button>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div id="results">
+            <div id="verdictCard" class="verdict-card">
+                <div class="verdict-left">
+                    <div id="stockNameDisplay" class="stock-name-display"></div>
+                    <div id="verdictSub" class="verdict-sub"></div>
+                </div>
+                <div id="verdictBadge" class="verdict-badge"></div>
+            </div>
+
+            <div class="metrics-grid" id="metricsGrid"></div>
+
+            <div class="price-band-section">
+                <div class="band-title">Price Band Analysis</div>
+                <div class="price-track-wrap">
+                    <div class="price-labels">
+                        <span id="bandMin">₹0</span>
+                        <span id="bandMax">₹0</span>
+                    </div>
+                    <div class="price-track">
+                        <div class="price-marker" id="priceMarker" style="left:50%"></div>
+                    </div>
+                    <div class="price-zone-labels">
+                        <span style="color:var(--accent)">Strong Buy</span>
+                        <span style="color:var(--buy)">Buy</span>
+                        <span style="color:var(--hold)">Fair Value</span>
+                        <span style="color:var(--warn)">Watch</span>
+                        <span style="color:var(--danger)">Overvalued</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-section">
+                <div class="insights-title">Key Insights</div>
+                <div id="insightsList"></div>
+            </div>
+        </div>
+
+        <!-- WATCHLIST -->
+        <div class="stocks-section" style="margin-top: 28px;">
+            <div class="stocks-header">
+                <div class="stocks-title">📋 Watchlist</div>
+                <button class="btn-add-stock" onclick="addCurrentToWatchlist()">+ Add to Watchlist</button>
+            </div>
+            <div id="watchlistContainer">
+                <div class="empty-state">No stocks yet. Analyze a stock and add it to your watchlist.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="btn-container">
-      <button class="btn-primary" onclick="calculate()">Calculate Valuation</button>
-      <button class="btn-secondary" onclick="clearAll()">Clear All</button>
-    </div>
-  </div>
+    <script>
+        let watchlist = JSON.parse(localStorage.getItem('vsWatchlist') || '[]');
+        let currentAnalysis = null;
 
-  <div id="results"></div>
-</div>
+        // Pre-fill from the user's data
+        window.onload = () => {
+            document.getElementById('stockName').value = 'Central Bank of India';
+            document.getElementById('iv').value = '58.1';
+            document.getElementById('cmp').value = '36';
+            document.getElementById('mos').value = '30';
+            renderWatchlist();
+        };
 
-<script>
-let data = JSON.parse(localStorage.getItem("stocks")) || [];
+        function calcPrices(iv, mos) {
+            const mosFrac = mos / 100;
+            return {
+                strongBuy: iv * (1 - (mosFrac + 0.1)),   // 40% below IV
+                buy: iv * (1 - mosFrac),                  // 30% below IV
+                fairValue: iv,
+                watch: iv * (1 + 0.05),
+                overvalued: iv * (1 + 0.10)
+            };
+        }
 
-function save(){
-  localStorage.setItem("stocks", JSON.stringify(data));
-}
+        function getDecision(cmp, prices, fundamentalsOk) {
+            if (!fundamentalsOk) {
+                return { label: 'AVOID', color: 'red', reason: 'Fundamentals are weak — skip regardless of price.' };
+            }
+            if (cmp <= prices.strongBuy) return { label: 'STRONG_BUY', color: 'green', reason: 'Deeply discounted. Strong margin of safety.' };
+            if (cmp <= prices.buy) return { label: 'BUY', color: 'green', reason: 'Trading within buy zone. Good discount to IV.' };
+            if (cmp <= prices.fairValue) return { label: 'HOLD', color: 'yellow', reason: 'Near fair value. Accumulate on dips.' };
+            if (cmp <= prices.overvalued) return { label: 'HOLD', color: 'yellow', reason: 'Slightly above fair value. Watch closely.' };
+            return { label: 'OVERVALUED', color: 'red', reason: 'Price exceeds intrinsic value by >10%. Avoid or exit.' };
+        }
 
-function calculate(){
-  const name = document.getElementById("name").value.trim();
-  const price = parseFloat(document.getElementById("price").value);
-  const eps = parseFloat(document.getElementById("eps").value);
-  const bvps = parseFloat(document.getElementById("bvps").value);
-  const growth = parseFloat(document.getElementById("growth").value);
-  const fcf = parseFloat(document.getElementById("fcf").value);
-  const discount = parseFloat(document.getElementById("discount").value);
+        function analyzeStock() {
+            const name = document.getElementById('stockName').value.trim() || 'Unknown Stock';
+            const iv = parseFloat(document.getElementById('iv').value);
+            const cmp = parseFloat(document.getElementById('cmp').value);
+            const mos = parseFloat(document.getElementById('mos').value) || 30;
+            const fundValue = document.getElementById('fundamentals').value;
+            const fundamentalsOk = fundValue === 'yes';
 
-  if(!name || [price,eps,bvps,growth,fcf,discount].some(v => isNaN(v))){
-    alert("Please enter valid inputs for all fields");
-    return;
-  }
+            if (isNaN(iv) || isNaN(cmp) || iv <= 0 || cmp <= 0) {
+                alert('Please enter valid Intrinsic Value and Current Price.');
+                return;
+            }
 
-  // Graham
-  const graham = Math.sqrt(22.5 * eps * bvps);
-  // Growth Formula
-  const growthVal = eps * (8.5 + 2 * growth);
-  // DCF
-  let dcf = 0;
-  let cash = fcf;
-  for(let i=1; i<=5; i++){
-    cash *= (1 + growth/100);
-    dcf += cash / Math.pow(1 + discount/100, i);
-  }
-  // Ratios
-  const pe = price / eps;
-  const peg = growth > 0 ? pe / growth : 0;
-  // Intrinsic Average
-  const intrinsic = (graham + growthVal + dcf) / 3;
-  const mos = ((intrinsic - price)/intrinsic)*100;
+            const prices = calcPrices(iv, mos);
+            const decision = getDecision(cmp, prices, fundamentalsOk);
+            const discount = ((iv - cmp) / iv * 100);
+            const priceGap = cmp - prices.buy;
+            const upside = ((iv - cmp) / cmp * 100);
 
-  // Decision
-  let buyCount = 0;
-  if(graham > price) buyCount++;
-  if(growthVal > price) buyCount++;
-  if(dcf > price) buyCount++;
+            currentAnalysis = { name, iv, cmp, mos, prices, decision, discount, priceGap, upside, fundamentalsOk, fundValue };
 
-  let verdict="HOLD", className="hold";
-  if(buyCount>=2){ verdict="BUY"; className="buy"; }
-  if(buyCount===0){ verdict="SELL"; className="sell"; }
+            renderResults(currentAnalysis);
+        }
 
-  const confidence = buyCount===3 ? "High" : buyCount===2 ? "Medium" : "Low";
+        function renderResults(d) {
+            const { name, iv, cmp, mos, prices, decision, discount, priceGap, upside, fundamentalsOk, fundValue } = d;
 
-  // Warning system
-  let warning="";
-  if(growth>25) warning="⚠️ Growth rate seems very high and may be unrealistic";
-  if(discount<8) warning="⚠️ Discount rate is quite low";
+            const resultsEl = document.getElementById('results');
+            resultsEl.style.display = 'block';
 
-  const obj = {
-    name, price, graham, growthVal, dcf, peg, mos, intrinsic,
-    verdict, className, confidence, warning
-  };
+            // Verdict card
+            const card = document.getElementById('verdictCard');
+            card.className = `verdict-card verdict-${decision.label}`;
+            document.getElementById('stockNameDisplay').textContent = name;
+            document.getElementById('verdictSub').textContent = decision.reason;
+            const badge = document.getElementById('verdictBadge');
+            badge.className = `verdict-badge badge-${decision.label}`;
+            badge.textContent = decision.label.replace('_', ' ');
 
-  data.unshift(obj);
-  save();
-  render();
+            // Metrics
+            const mg = document.getElementById('metricsGrid');
+            const discountColor = discount >= 30 ? 'green' : discount >= 0 ? 'yellow' : 'red';
+            const upsideColor = upside >= 50 ? 'green' : upside >= 20 ? 'yellow' : 'red';
+            const mosLabel = mos + '% MOS req.';
+            mg.innerHTML = `
+    ${metric('Intrinsic Value', '₹' + iv.toFixed(2), 'DCF / Graham estimate', 'blue')}
+    ${metric('Current Price', '₹' + cmp.toFixed(2), 'CMP today', cmp <= prices.buy ? 'green' : 'yellow')}
+    ${metric('Discount to IV', discount.toFixed(1) + '%', mosLabel, discountColor)}
+    ${metric('Upside Potential', upside.toFixed(1) + '%', 'If reverts to IV', upsideColor)}
+    ${metric('Strong Buy ≤', '₹' + prices.strongBuy.toFixed(2), '40% below IV', 'green', cmp <= prices.strongBuy)}
+    ${metric('Buy Zone ≤', '₹' + prices.buy.toFixed(2), '30% below IV', 'blue', cmp <= prices.buy && cmp > prices.strongBuy)}
+    ${metric('Fair Value', '₹' + iv.toFixed(2), '±0%', 'yellow')}
+    ${metric('Overvalued >', '₹' + prices.overvalued.toFixed(2), '+10% above IV', 'red')}
+  `;
 
-  // Auto clear form
-  document.querySelectorAll("input").forEach(i => i.value = "");
-}
+            // Price band
+            const min = prices.strongBuy * 0.85;
+            const max = prices.overvalued * 1.15;
+            const pct = Math.min(Math.max((cmp - min) / (max - min) * 100, 2), 98);
+            document.getElementById('bandMin').textContent = '₹' + min.toFixed(0);
+            document.getElementById('bandMax').textContent = '₹' + max.toFixed(0);
+            document.getElementById('priceMarker').style.left = pct + '%';
 
-function render(){
-  const container = document.getElementById("results");
-  container.innerHTML = "";
+            // Insights
+            const il = document.getElementById('insightsList');
+            const insights = generateInsights(d, prices);
+            il.innerHTML = insights.map(i =>
+                `<div class="insight-row">
+      <div class="insight-dot dot-${i.color}"></div>
+      <div>${i.text}</div>
+    </div>`
+            ).join('');
 
-  if(data.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:60px; color:var(--muted);">
-      <h3>No valuations yet</h3>
-      <p>Fill the form and calculate to see results</p>
-    </div>`;
-    return;
-  }
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
-  data.forEach((d, i) => {
-    container.innerHTML += `
-    <div class="result-card">
-      <div class="result-header">
-        <h3>${d.name}</h3>
-        <button class="delete-btn" onclick="deleteCard(${i})">✕</button>
-      </div>
+        function metric(label, value, note, colorClass, highlight = false) {
+            return `<div class="metric-card ${highlight ? 'highlight' : ''}">
+    <div class="metric-label">${label}</div>
+    <div class="metric-value ${colorClass}">${value}</div>
+    <div class="metric-note">${note}</div>
+  </div>`;
+        }
 
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">Market Price</div>
-          <div class="metric-value">₹${d.price.toLocaleString('en-IN')}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Graham Value</div>
-          <div class="metric-value">₹${d.graham.toFixed(2)}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Growth Value</div>
-          <div class="metric-value">₹${d.growthVal.toFixed(2)}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">5-Year DCF</div>
-          <div class="metric-value">₹${d.dcf.toFixed(2)}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Average Intrinsic Value</div>
-          <div class="metric-value">₹${d.intrinsic.toFixed(2)}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">PEG Ratio</div>
-          <div class="metric-value">${d.peg.toFixed(2)}</div>
-        </div>
-      </div>
+        function generateInsights(d, prices) {
+            const { cmp, iv, mos, discount, upside, fundamentalsOk, fundValue, priceGap } = d;
+            const ins = [];
 
-      <div class="metric">
-        <div class="metric-label">Margin of Safety</div>
-        <div class="metric-value ${d.mos > 0 ? 'text-green' : 'text-red'}">
-          ${d.mos.toFixed(2)}%
-        </div>
-      </div>
+            if (!fundamentalsOk) {
+                ins.push({ color: 'red', text: '⚠️ Fundamentals are not OK. No matter how cheap, a weak business destroys capital. Research deeper before investing.' });
+            } else {
+                ins.push({ color: 'green', text: '✅ Fundamentals check passed. The business quality supports further valuation analysis.' });
+            }
 
-      <div class="verdict-section">
-        <span class="badge ${d.className}">${d.verdict}</span>
-        <span class="badge" style="background:rgba(99,102,241,0.15); color:#a5b4fc;">
-          ${d.confidence} Confidence
-        </span>
-      </div>
+            if (discount >= 40) {
+                ins.push({ color: 'green', text: `Stock is trading at a ${discount.toFixed(1)}% discount to intrinsic value — a rare deep value opportunity.` });
+            } else if (discount >= 20) {
+                ins.push({ color: 'green', text: `${discount.toFixed(1)}% discount to IV provides a reasonable margin of safety.` });
+            } else if (discount > 0) {
+                ins.push({ color: 'yellow', text: `Only ${discount.toFixed(1)}% below IV. Margin of safety is thin. Wait for a better entry.` });
+            } else {
+                ins.push({ color: 'red', text: `Stock is trading ${Math.abs(discount).toFixed(1)}% ABOVE intrinsic value. Overvalued territory.` });
+            }
 
-      ${d.warning ? `<div class="warning">${d.warning}</div>` : ""}
-    </div>
-    `;
-  });
-}
+            ins.push({ color: 'blue', text: `If the price reverts to intrinsic value (₹${iv.toFixed(2)}), you gain ${upside.toFixed(1)}% from current levels.` });
 
-function deleteCard(i){
-  if(confirm("Delete this valuation?")){
-    data.splice(i,1);
-    save();
-    render();
-  }
-}
+            if (cmp <= prices.strongBuy) {
+                ins.push({ color: 'green', text: `Price is in the STRONG BUY zone (≤₹${prices.strongBuy.toFixed(2)}). This is the ideal entry point for maximum returns.` });
+            } else if (cmp <= prices.buy) {
+                ins.push({ color: 'green', text: `Price is in the BUY zone. ₹${Math.abs(priceGap).toFixed(2)} above strong buy price. Accumulate in tranches.` });
+            } else {
+                ins.push({ color: 'yellow', text: `Price needs to fall ₹${(cmp - prices.buy).toFixed(2)} more to enter the buy zone. Set a price alert at ₹${prices.buy.toFixed(2)}.` });
+            }
 
-function clearAll(){
-  if(confirm("Clear all saved valuations?")){
-    data = [];
-    save();
-    render();
-  }
-}
+            if (mos < 25) {
+                ins.push({ color: 'yellow', text: `Your MOS of ${mos}% is relatively low. Consider 30–40% for cyclical or uncertain businesses.` });
+            }
 
-render();
-</script>
+            return ins;
+        }
+
+        function clearResults() {
+            document.getElementById('results').style.display = 'none';
+            currentAnalysis = null;
+        }
+
+        function addCurrentToWatchlist() {
+            if (!currentAnalysis) { alert('Analyze a stock first.'); return; }
+            const exists = watchlist.findIndex(s => s.name.toLowerCase() === currentAnalysis.name.toLowerCase());
+            if (exists >= 0) {
+                watchlist[exists] = { ...currentAnalysis, addedAt: Date.now() };
+            } else {
+                watchlist.push({ ...currentAnalysis, addedAt: Date.now() });
+            }
+            saveAndRender();
+        }
+
+        function removeFromWatchlist(idx) {
+            watchlist.splice(idx, 1);
+            saveAndRender();
+        }
+
+        function loadFromWatchlist(idx) {
+            const s = watchlist[idx];
+            document.getElementById('stockName').value = s.name;
+            document.getElementById('iv').value = s.iv;
+            document.getElementById('cmp').value = s.cmp;
+            document.getElementById('mos').value = s.mos;
+            document.getElementById('fundamentals').value = s.fundValue || 'yes';
+            analyzeStock();
+        }
+
+        function saveAndRender() {
+            try { localStorage.setItem('vsWatchlist', JSON.stringify(watchlist)); } catch (e) { }
+            renderWatchlist();
+        }
+
+        function renderWatchlist() {
+            const c = document.getElementById('watchlistContainer');
+            if (!watchlist.length) {
+                c.innerHTML = '<div class="empty-state">No stocks yet. Analyze a stock and add it to your watchlist.</div>';
+                return;
+            }
+
+            // Sort by discount descending (best deals first)
+            const sorted = [...watchlist].sort((a, b) => b.discount - a.discount);
+
+            c.innerHTML = `<table class="stocks-table">
+    <thead>
+      <tr>
+        <th>Stock</th>
+        <th>CMP</th>
+        <th>IV</th>
+        <th>Discount</th>
+        <th>Decision</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      ${sorted.map((s, i) => {
+                const origIdx = watchlist.indexOf(s);
+                const label = s.decision?.label || 'HOLD';
+                return `<tr onclick="loadFromWatchlist(${origIdx})">
+          <td style="font-weight:600;color:var(--text)">${s.name}</td>
+          <td>₹${parseFloat(s.cmp).toFixed(2)}</td>
+          <td>₹${parseFloat(s.iv).toFixed(2)}</td>
+          <td class="${s.discount >= 30 ? 'green' : s.discount >= 0 ? 'yellow' : 'red'}">${s.discount.toFixed(1)}%</td>
+          <td><span class="decision-pill pill-${label}">${label.replace('_', ' ')}</span></td>
+          <td><button class="del-btn" onclick="event.stopPropagation();removeFromWatchlist(${origIdx})">✕</button></td>
+        </tr>`;
+            }).join('')}
+    </tbody>
+  </table>`;
+        }
+    </script>
 </body>
+
 </html>
