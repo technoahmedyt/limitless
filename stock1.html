@@ -1,405 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Minimal Layout</title>
-
-    <!--CSS-->
-    <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --border: #e2e8f0;
-        }
-
-        /* ===== GLOBAL ===== */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: #222;
-            line-height: 1.6;
-        }
-
-        /* ===== HEADER ===== */
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 26px;
-            font-weight: 700;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ===== NAV ===== */
-        nav {
-            background: white;
-            padding: 14px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-
-        nav a {
-            margin: 0 16px;
-            text-decoration: none;
-            color: #334155;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent);
-        }
-
-        /* ===== HEADER AD ===== */
-        .he-ad {
-            background: #f8fafc;
-            text-align: center;
-            padding: 12px;
-            font-size: 13px;
-            color: #64748b;
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* ===== LAYOUT ===== */
-        .containerD {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        aside {
-            width: 180px;
-            background: var(--card);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        aside h3 {
-            margin-top: 0;
-            font-size: 15px;
-            color: var(--primary);
-        }
-
-        /* ===== CALCULATOR STYLES ===== */
-        .card {
-            background: var(--card);
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
-            border: 1px solid var(--border);
-            margin-bottom: 25px;
-        }
-
-        h2 {
-            margin: 0 0 8px;
-            font-size: 24px;
-            color: var(--primary);
-        }
-
-        .disclaimer {
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .field {
-            flex: 1;
-            min-width: 220px;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 14px;
-            color: #334155;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 16px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .box-title {
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .box-value {
-            margin-top: 8px;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .success {
-            color: var(--success);
-        }
-
-        .danger {
-            color: var(--danger);
-        }
-
-        .ad-slot {
-            background: #e2e8f0;
-            text-align: center;
-            padding: 16px;
-            border-radius: 12px;
-            margin: 25px 0;
-            font-size: 14px;
-            color: #475569;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 900px) {
-            .containerD {
-                flex-direction: column;
-            }
-
-            aside {
-                width: 100%;
-            }
-
-            .row {
-                flex-direction: column;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio Risk Calculator | TradeSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+    }
+    input[type="number"] {
+      transition: all 0.2s ease;
+    }
+    input[type="number"]:focus {
+      box-shadow: 0 0 0 3px rgba(34, 197, 151, 0.3);
+      border-color: #22c55e;
+    }
+    .result {
+      font-weight: 600;
+      color: #15803d;
+    }
+  </style>
 </head>
-
-<body>
-    <!-- HEADER -->
-    <header>
-        <h1>Stock Risk Calculator Pro</h1>
-    </header>
-
-    <!-- TOP NAV -->
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Tools</a>
-        <a href="#">Blog</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
-
-    <!-- HEADER AD -->
-    <div class="he-ad">
-        Header Ad Space (728×90)
+<body class="bg-gradient-to-br from-slate-50 to-gray-100 min-h-screen py-8 px-4">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
+        <i class="fa-solid fa-chart-line text-emerald-600"></i>
+        Portfolio Risk Calculator
+      </h1>
+      <p class="text-gray-600 max-w-md mx-auto">
+        Calculate position size, risk management, and profit targets with precision
+      </p>
     </div>
 
-    <div class="containerD">
-        <!-- LEFT SIDEBAR -->
-        <aside>
-            <h3>Quick Tools</h3>
-            <ul>
-                <li>📊 Risk Calculator</li>
-                <li>📈 Position Sizer</li>
-                <li>🎯 Target Calculator</li>
-                <li>💰 Portfolio Tracker</li>
-            </ul>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main>
-            <div class="calculator-wrapper">
-                <div class="card">
-                    <h2>Stock Risk Calculator</h2>
-                    <div class="disclaimer">Educational tool only • Trading involves risk</div>
-
-                    <div class="row">
-                        <div class="field">
-                            <label>Entry Price (₹)</label>
-                            <input type="number" id="entry" value="12" step="0.01">
-                        </div>
-                        <div class="field">
-                            <label>Stop Loss (₹)</label>
-                            <input type="number" id="stop" value="8.36" step="0.01">
-                        </div>
-                        <div class="field">
-                            <label>Risk Amount (₹)</label>
-                            <input type="number" id="riskAmount" value="100">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">Responsive Ad Slot</div>
-
-                <!-- Position Summary -->
-                <div class="card">
-                    <div class="section-title">Position Summary</div>
-                    <div class="grid">
-                        <div class="box">
-                            <div class="box-title">Difference (Entry - SL)</div>
-                            <div class="box-value danger" id="difference"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">Quantity</div>
-                            <div class="box-value" id="quantity"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">Capital Needed</div>
-                            <div class="box-value" id="capital"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">
-                    <div class="desktopx">
-                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1407005444783172"
-                            data-ad-slot="9412459030" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                    </div>
-                </div>
-
-                <!-- TGT per Trade -->
-                <div class="card">
-                    <div class="section-title">TGT per Trade</div>
-                    <div class="grid">
-                        <div class="box">
-                            <div class="box-title">TGT 1</div>
-                            <div class="box-value success" id="tgt1"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">TGT 2</div>
-                            <div class="box-value success" id="tgt2"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">TGT 3</div>
-                            <div class="box-value success" id="tgt3"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ad-slot">Responsive Ad Slot</div>
-
-                <!-- Final Targets -->
-                <div class="card">
-                    <div class="section-title">Final Target Prices</div>
-                    <div class="grid">
-                        <div class="box">
-                            <div class="box-title">1st Target</div>
-                            <div class="box-value success" id="final1"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">2nd Target</div>
-                            <div class="box-value success" id="final2"></div>
-                        </div>
-                        <div class="box">
-                            <div class="box-title">3rd Target</div>
-                            <div class="box-value success" id="final3"></div>
-                        </div>
-                    </div>
-                </div>
+    <div class="glass rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+      <div class="p-8">
+        <!-- Portfolio Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Portfolio Amount</label>
+            <div class="relative">
+              <span class="absolute left-4 top-3 text-gray-500">$</span>
+              <input type="number" id="portfolio" value="5000" 
+                     class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-2xl focus:outline-none text-lg">
             </div>
-        </main>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Risk % per Trade</label>
+            <div class="flex items-center gap-3">
+              <input type="range" id="riskSlider" min="0.1" max="5" step="0.1" value="2" 
+                     class="w-full accent-emerald-600">
+              <input type="number" id="riskPercent" value="2" 
+                     class="w-20 text-center border border-gray-300 rounded-2xl py-3 text-lg">
+              <span class="text-gray-500 font-medium">%</span>
+            </div>
+          </div>
+          <div class="bg-emerald-50 rounded-2xl p-5 flex flex-col justify-center">
+            <p class="text-sm text-emerald-700 font-medium">Risk Amount</p>
+            <p id="riskAmount" class="text-3xl font-bold text-emerald-600">$100.00</p>
+          </div>
+        </div>
 
-        <!-- RIGHT SIDEBAR -->
-        <aside>
-            <h3>Market Snapshot</h3>
-            <p>Nifty • 22,345.67 <span style="color:#16a34a">↑ 1.24%</span></p>
-            <p>Bank Nifty • 48,912.45 <span style="color:#dc2626">↓ 0.45%</span></p>
-        </aside>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <!-- BUY SIDE -->
+          <div class="space-y-6">
+            <div class="flex items-center gap-3 border-b pb-3">
+              <div class="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm font-bold">B</div>
+              <h2 class="text-2xl font-semibold text-emerald-700">LONG (BUY)</h2>
+            </div>
+
+            <div class="space-y-5">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Entry Price</label>
+                  <input type="number" id="buyEntry" value="10" step="0.01" class="w-full p-4 border border-gray-300 rounded-2xl text-lg">
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Stop Loss</label>
+                  <input type="number" id="buySL" value="8" step="0.01" class="w-full p-4 border border-gray-300 rounded-2xl text-lg">
+                </div>
+              </div>
+
+              <div class="bg-gray-50 rounded-2xl p-5 space-y-4">
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Risk Distance</span>
+                  <span id="buyDiff" class="result">2.00</span>
+                </div>
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Quantity</span>
+                  <span id="buyQty" class="result">50.00</span>
+                </div>
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Capital Required</span>
+                  <span id="buyAmount" class="result">$500.00</span>
+                </div>
+              </div>
+
+              <!-- Targets -->
+              <div>
+                <h3 class="font-semibold text-emerald-700 mb-3">Profit Targets</h3>
+                <div class="space-y-3" id="buyTargets"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SELL SIDE -->
+          <div class="space-y-6">
+            <div class="flex items-center gap-3 border-b pb-3">
+              <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">S</div>
+              <h2 class="text-2xl font-semibold text-red-700">SHORT (SELL)</h2>
+            </div>
+
+            <div class="space-y-5">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Entry Price</label>
+                  <input type="number" id="sellEntry" value="8" step="0.01" class="w-full p-4 border border-gray-300 rounded-2xl text-lg">
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-600 mb-1">Stop Loss</label>
+                  <input type="number" id="sellSL" value="10" step="0.01" class="w-full p-4 border border-gray-300 rounded-2xl text-lg">
+                </div>
+              </div>
+
+              <div class="bg-gray-50 rounded-2xl p-5 space-y-4">
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Risk Distance</span>
+                  <span id="sellDiff" class="result">2.00</span>
+                </div>
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Quantity</span>
+                  <span id="sellQty" class="result">50.00</span>
+                </div>
+                <div class="flex justify-between text-lg">
+                  <span class="text-gray-600">Capital Required</span>
+                  <span id="sellAmount" class="result">$400.00</span>
+                </div>
+              </div>
+
+              <!-- Targets -->
+              <div>
+                <h3 class="font-semibold text-red-700 mb-3">Profit Targets</h3>
+                <div class="space-y-3" id="sellTargets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Profit Summary -->
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-8">
+        <h3 class="text-lg font-medium mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-trophy"></i> Potential Profit (per trade)
+        </h3>
+        <div id="profits" class="grid grid-cols-3 gap-6 text-center"></div>
+      </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        © 2026 Stock Risk Calculator Pro • Educational Use Only
-    </footer>
+    <div class="text-center text-xs text-gray-500 mt-6">
+      Always trade responsibly • Past performance is not indicative of future results
+    </div>
+  </div>
 
-    <script>
-        // INR Formatter
-        function formatINR(value) {
-            return new Intl.NumberFormat('en-IN', {
-                style: 'currency',
-                currency: 'INR'
-            }).format(value);
-        }
+  <script>
+    function round(num) {
+      return Number(num).toFixed(2);
+    }
 
-        function calculate() {
-            let entry = parseFloat(document.getElementById("entry").value) || 0;
-            let stop = parseFloat(document.getElementById("stop").value) || 0;
-            let riskAmount = parseFloat(document.getElementById("riskAmount").value) || 0;
+    function calculate() {
+      const portfolio = parseFloat(document.getElementById('portfolio').value) || 0;
+      const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0;
+      const riskAmount = (portfolio * riskPercent) / 100;
 
-            let difference = Math.abs(entry - stop);
-            let quantity = difference > 0 ? riskAmount / difference : 0;
-            let capital = quantity * entry;
+      document.getElementById('riskAmount').textContent = '$' + round(riskAmount);
 
-            document.getElementById("difference").innerText = formatINR(difference);
-            document.getElementById("quantity").innerText = quantity.toFixed(4);
-            document.getElementById("capital").innerText = formatINR(capital);
+      // BUY
+      const buyEntry = parseFloat(document.getElementById('buyEntry').value) || 0;
+      const buySL = parseFloat(document.getElementById('buySL').value) || 0;
+      const buyDiff = Math.abs(buyEntry - buySL);
+      const buyQty = buyDiff ? riskAmount / buyDiff : 0;
+      const buyAmount = buyQty * buyEntry;
 
-            document.getElementById("tgt1").innerText = formatINR(difference * 1);
-            document.getElementById("tgt2").innerText = formatINR(difference * 2);
-            document.getElementById("tgt3").innerText = formatINR(difference * 3);
+      document.getElementById('buyDiff').textContent = round(buyDiff);
+      document.getElementById('buyQty').textContent = round(buyQty);
+      document.getElementById('buyAmount').textContent = '$' + round(buyAmount);
 
-            document.getElementById("final1").innerText = formatINR(entry + difference * 1);
-            document.getElementById("final2").innerText = formatINR(entry + difference * 2);
-            document.getElementById("final3").innerText = formatINR(entry + difference * 3);
-        }
+      // SELL
+      const sellEntry = parseFloat(document.getElementById('sellEntry').value) || 0;
+      const sellSL = parseFloat(document.getElementById('sellSL').value) || 0;
+      const sellDiff = Math.abs(sellEntry - sellSL);
+      const sellQty = sellDiff ? riskAmount / sellDiff : 0;
+      const sellAmount = sellQty * sellEntry;
 
-        // Live calculation
-        document.querySelectorAll("input").forEach(input => {
-            input.addEventListener("input", calculate);
-        });
+      document.getElementById('sellDiff').textContent = round(sellDiff);
+      document.getElementById('sellQty').textContent = round(sellQty);
+      document.getElementById('sellAmount').textContent = '$' + round(sellAmount);
 
-        // Initial run
-        calculate();
-    </script>
+      // Buy Targets
+      let buyHTML = '';
+      for (let i = 1; i <= 3; i++) {
+        const target = buyEntry + (buyDiff * i);
+        const profit = (target - buyEntry) * buyQty;
+        buyHTML += `
+          <div class="flex justify-between bg-white/10 rounded-2xl px-5 py-3">
+            <span>T${i}</span>
+            <span class="font-medium">${round(target)}</span>
+            <span class="text-emerald-200">+$${round(profit)}</span>
+          </div>`;
+      }
+      document.getElementById('buyTargets').innerHTML = buyHTML;
+
+      // Sell Targets
+      let sellHTML = '';
+      for (let i = 1; i <= 3; i++) {
+        const target = sellEntry - (sellDiff * i);
+        const profit = (sellEntry - target) * sellQty;
+        sellHTML += `
+          <div class="flex justify-between bg-white/10 rounded-2xl px-5 py-3">
+            <span>T${i}</span>
+            <span class="font-medium">${round(target)}</span>
+            <span class="text-emerald-200">+$${round(profit)}</span>
+          </div>`;
+      }
+      document.getElementById('sellTargets').innerHTML = sellHTML;
+
+      // Profit Summary
+      const profit1 = buyDiff * buyQty;
+      const profitHTML = `
+        <div>
+          <p class="text-sm opacity-75">Target 1</p>
+          <p class="text-2xl font-bold">$${round(profit1)}</p>
+        </div>
+        <div>
+          <p class="text-sm opacity-75">Target 2</p>
+          <p class="text-2xl font-bold">$${round(profit1 * 2)}</p>
+        </div>
+        <div>
+          <p class="text-sm opacity-75">Target 3</p>
+          <p class="text-2xl font-bold">$${round(profit1 * 3)}</p>
+        </div>`;
+      document.getElementById('profits').innerHTML = profitHTML;
+    }
+
+    // Sync BUY ↔ SELL
+    document.getElementById('buyEntry').addEventListener('input', () => {
+      document.getElementById('sellSL').value = document.getElementById('buyEntry').value;
+      calculate();
+    });
+    document.getElementById('buySL').addEventListener('input', () => {
+      document.getElementById('sellEntry').value = document.getElementById('buySL').value;
+      calculate();
+    });
+
+    // Real-time updates
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', calculate);
+    });
+
+    // Sync slider with percentage input
+    const riskSlider = document.getElementById('riskSlider');
+    const riskPercentInput = document.getElementById('riskPercent');
+
+    riskSlider.addEventListener('input', () => {
+      riskPercentInput.value = riskSlider.value;
+      calculate();
+    });
+
+    riskPercentInput.addEventListener('input', () => {
+      riskSlider.value = riskPercentInput.value;
+      calculate();
+    });
+
+    // Initial calculation
+    calculate();
+  </script>
 </body>
-
 </html>
