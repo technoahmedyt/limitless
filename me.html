@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raza Digital | Cyber Café</title>
+<meta name="description" content="Raza Digital cyber café: printing, photocopy, online forms and internet services.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c1:#2f6b66; --c2:#d9a12a; --c3:#a99bb5; --c4:#5b6fa6;
+  --card:#ffffff; --ink:#2a2420;
+  --font:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:var(--font);color:var(--ink);
+  background:#5b6fa6;
+  min-height:100vh;min-height:100dvh;
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:max(48px,env(safe-area-inset-top)) 20px max(40px,env(safe-area-inset-bottom));
+  overflow-x:hidden;position:relative;
+}
+/* calm landscape background */
+.bg{position:fixed;inset:-3%;z-index:-1;overflow:hidden;background:#5b6fa6}
+.bg svg{width:100%;height:100%;display:block}
+.cloud{animation:cloud 90s linear infinite;opacity:.8}
+.cloud.c2{animation-duration:140s;animation-delay:-60s;opacity:.55}
+.cloud.c3{animation-duration:115s;animation-delay:-25s;opacity:.65}
+@keyframes cloud{from{transform:translateX(-500px)}to{transform:translateX(1900px)}}
+.sun{animation:breathe 9s ease-in-out infinite alternate;transform-origin:1010px 585px;transform-box:view-box}
+@keyframes breathe{from{opacity:.85;transform:scale(1)}to{opacity:1;transform:scale(1.08)}}
+.mist{animation:mist 18s ease-in-out infinite alternate}
+@keyframes mist{from{transform:translateX(-30px)}to{transform:translateX(30px)}}
+
+main{width:100%;max-width:480px;text-align:center;color:#fff}
+
+/* avatar */
+.avatar{
+  width:104px;height:104px;margin:0 auto 16px;border-radius:50%;
+  padding:4px;background:conic-gradient(from 0deg,#fff,#ffe3b8,#9fb6e6,#fff);
+  animation:pop .9s cubic-bezier(.2,1.3,.4,1) both, spin 8s linear infinite;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#eee;animation:spin 8s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+
+h1{font-size:1.35rem;font-weight:800;letter-spacing:.2px;text-shadow:0 2px 14px rgba(20,30,70,.45);animation:rise .7s .15s both}
+.bio{margin-top:4px;font-size:.98rem;text-shadow:0 1px 10px rgba(20,30,70,.45);animation:rise .7s .25s both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* link buttons */
+.links{display:flex;flex-direction:column;gap:14px;margin:28px 0 30px;list-style:none}
+.link{
+  position:relative;display:block;overflow:hidden;
+  padding:17px 24px;border-radius:16px;
+  background:var(--card);color:var(--ink);text-decoration:none;
+  font-size:1.02rem;font-weight:600;
+  box-shadow:0 8px 22px rgba(20,35,60,.22);
+  opacity:0;animation:rise .6s cubic-bezier(.2,.9,.3,1) forwards;
+  transition:transform .25s cubic-bezier(.2,1.2,.4,1),box-shadow .25s,color .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.link::before{ /* color sweep on hover */
+  content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(90deg,var(--c1),var(--c4));
+  transform:translateX(-101%);transition:transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.link span{position:relative;z-index:1}
+.link:hover,.link:focus-visible{transform:translateY(-4px) scale(1.025);box-shadow:0 16px 30px rgba(20,35,60,.32);color:#fff;outline:none}
+.link:hover::before,.link:focus-visible::before{transform:none}
+.link:active{transform:scale(.97)}
+.link:focus-visible{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--c1)}
+.link .shine{ /* idle shimmer */
+  position:absolute;top:0;bottom:0;width:60px;left:-80px;z-index:1;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);
+  transform:skewX(-20deg);animation:shine 5s ease-in-out infinite;
+}
+@keyframes shine{0%,70%{left:-80px}100%{left:120%}}
+
+/* socials */
+.socials{display:flex;justify-content:center;gap:22px;list-style:none}
+.socials li{opacity:0;animation:rise .6s forwards}
+.socials a{
+  display:grid;place-items:center;width:46px;height:46px;color:#fff;border-radius:50%;
+  transition:transform .3s cubic-bezier(.2,1.5,.4,1),background .25s;
+}
+.socials a:hover,.socials a:focus-visible{transform:translateY(-5px) rotate(-8deg) scale(1.15);background:rgba(255,255,255,.22);outline:none}
+.socials svg{width:28px;height:28px;fill:currentColor}
+
+/* cyber cafe additions */
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:6px 14px;border-radius:99px;font-size:.84rem;font-weight:600;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:rise .7s .3s both}
+.status i{width:9px;height:9px;border-radius:50%;background:#7dffa8;box-shadow:0 0 0 0 rgba(125,255,168,.7);animation:pulse 2s infinite}
+.status.closed i{background:#ff8a8a;animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(125,255,168,0)}100%{box-shadow:0 0 0 0 rgba(125,255,168,0)}}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:18px;list-style:none}
+.chips li{padding:6px 13px;border-radius:99px;font-size:.8rem;font-weight:600;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;animation:rise .5s forwards}
+.link .ico{position:absolute;left:20px;top:50%;width:22px;height:22px;margin-top:-11px;fill:currentColor;z-index:1}
+.link.primary{background:linear-gradient(135deg,#1fa855,#25d366);color:#fff;box-shadow:0 10px 26px rgba(20,140,70,.4)}
+.link.primary::before{background:linear-gradient(90deg,#128c4a,#1fa855)}
+.avatar img.logo{padding:18%;background:#fff}
+
+/* tap ripple */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none;z-index:1}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+
+@media (min-width:700px){
+  body{align-items:center;padding-top:40px}
+  .avatar{width:120px;height:120px}
+  h1{font-size:1.6rem}
+}
+@media (max-width:360px){.link{padding:15px 18px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .link,.socials li{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a5d96"/><stop offset=".4" stop-color="#8ea3cf"/>
+      <stop offset=".68" stop-color="#f1c8b0"/><stop offset="1" stop-color="#f8dcb8"/>
+    </linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#fff3d6"/><stop offset=".25" stop-color="#ffd9a8" stop-opacity=".7"/><stop offset="1" stop-color="#ffd9a8" stop-opacity="0"/></radialGradient>
+    <linearGradient id="h1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d9fc6"/><stop offset="1" stop-color="#b9bfd8"/></linearGradient>
+    <linearGradient id="h2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f8c9c"/><stop offset="1" stop-color="#86aab0"/></linearGradient>
+    <linearGradient id="h3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b7a74"/><stop offset="1" stop-color="#2c5f5d"/></linearGradient>
+    <linearGradient id="h4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#245553"/><stop offset="1" stop-color="#1a3f43"/></linearGradient>
+    <linearGradient id="ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".6" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#sky)"/>
+  <circle class="sun" cx="1010" cy="585" r="300" fill="url(#glow)"/>
+  <circle cx="1010" cy="585" r="44" fill="#fff6e0"/>
+  <g fill="#fff">
+    <g class="cloud"><ellipse cx="0" cy="170" rx="120" ry="20"/><ellipse cx="-50" cy="155" rx="70" ry="18"/><ellipse cx="60" cy="158" rx="60" ry="16"/></g>
+    <g class="cloud c2"><ellipse cx="0" cy="300" rx="160" ry="22"/><ellipse cx="40" cy="284" rx="85" ry="18"/></g>
+    <g class="cloud c3"><ellipse cx="0" cy="90" rx="100" ry="16"/><ellipse cx="-40" cy="78" rx="60" ry="14"/></g>
+  </g>
+  <path fill="url(#h1)" d="M0 640C150 560 250 600 380 570C520 540 600 620 760 600C900 580 1000 540 1130 575C1260 610 1350 570 1440 590L1440 900L0 900Z"/>
+  <path class="mist" fill="url(#ms)" d="M-60 640H1500V700H-60Z"/>
+  <path fill="url(#h2)" d="M0 700C180 650 320 720 500 690C700 655 820 730 1020 700C1200 675 1330 700 1440 680L1440 900L0 900Z"/>
+  <path class="mist" fill="url(#ms)" style="animation-direction:alternate-reverse" d="M-60 710H1500V780H-60Z"/>
+  <path fill="url(#h3)" d="M0 780C200 740 380 800 600 775C820 750 1000 810 1200 780C1320 765 1400 770 1440 765L1440 900L0 900Z"/>
+  <path fill="url(#h4)" d="M0 850C250 820 500 870 760 845C1020 820 1250 870 1440 840L1440 900L0 900Z"/>
+</svg></div>
+
+<main>
+  <div class="avatar"><img id="avatar" alt="Profile photo"></div>
+  <h1 id="name"></h1>
+  <p class="bio" id="bio"></p>
+  <div class="status" id="status" hidden><i></i><span></span></div>
+  <ul class="chips" id="chips"></ul>
+  <ul class="links" id="links"></ul>
+  <ul class="socials" id="socials"></ul>
+</main>
+
+<script>
+/* ============================================================
+   EDIT THIS SECTION ONLY — everything else builds from it.
+   ============================================================ */
+const PROFILE = {
+  name:   "Raza Digital",
+  bio:    "Cyber café · Printing · Online services",
+  avatar: "logo.png",             // your shop logo (path or full URL)
+  title:  "Raza Digital | Cyber Café"
+};
+
+// Shows the Open / Closed badge using the visitor's local time.
+// Set hours to null to hide the badge. closedDays: 0 = Sunday ... 6 = Saturday
+const HOURS = { open: 9, close: 21, closedDays: [] };   // 9 AM to 9 PM
+
+// Small tags under your name. Add or remove freely.
+const SERVICES = ["Internet", "Printing", "Photocopy", "Scanning", "Online forms", "Passport photo"];
+
+// icon options: whatsapp, phone, map, list, form   |   primary:true = green highlight
+const LINKS = [
+  { label: "Chat on WhatsApp",      url: "https://wa.me/919308527072",           icon: "whatsapp", primary: true },
+  { label: "Call now",              url: "tel:+9308527072",                    icon: "phone" },
+  { label: "Services & price list", url: "https://yourwebsite.com/services",   icon: "list" },
+  { label: "Online form help",      url: "https://wa.me/919308527072?text=Hi%20Raza%20Digital%2C%20I%20need%20help%20with%20an%20online%20form", icon: "form" },
+  { label: "Find us on Google Maps",url: "https://maps.google.com/?q=Raza+Digital", icon: "map" }
+];
+
+// icon options: whatsapp, instagram, facebook, youtube, tiktok, x, linkedin, github, mail
+const SOCIALS = [
+  { icon: "whatsapp",  url: "https://wa.me/919308527072" },
+  { icon: "instagram", url: "https://instagram.com/technoahmedyt" },
+  { icon: "facebook",  url: "https://facebook.com/technoahmedytfb" },
+  { icon: "youtube",   url: "https://youtube.com/@ytechnoahmedyt" }
+];
+/* ============================================================ */
+
+const ICONS = {
+  whatsapp:'<path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.300 1.700 2.100 1.100 1 2.100 1.300 2.400 1.500.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.900.9c.3.1.5.2.5.3.1.1.1.6-.1 1.200z"/>',
+  phone:'<path d="M6.600 10.800a15 15 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.25 11.400 11.400 0 0 0 3.600.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.250.2 2.450.6 3.600a1 1 0 0 1-.25 1z"/>',
+  map:'<path d="M12 2a7 7 0 0 0-7 7c0 5.200 7 13 7 13s7-7.800 7-13a7 7 0 0 0-7-7zm0 9.500A2.500 2.500 0 1 1 12 6.500a2.500 2.500 0 0 1 0 5z"/>',
+  list:'<path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h10v2H4z"/>',
+  form:'<path d="M6 2h9l5 5v15H6zm8 1.500V8h4.500zM9 12h8v1.500H9zm0 3.500h8V17H9z"/>',
+  tiktok:'<path d="M16.6 2h-3.2v13.3a2.9 2.9 0 1 1-2-2.8V9.2a6.1 6.1 0 1 0 5.2 6V8.6a7.4 7.4 0 0 0 4.3 1.4V6.8a4.3 4.3 0 0 1-4.3-4.8z"/>',
+  youtube:'<path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2C.5 9.1.5 12 .5 12s0 2.9.5 4.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-4.8.5-4.8s0-2.9-.5-4.8zM9.8 15.5v-7l6 3.5-6 3.5z"/>',
+  x:'<path d="M18.2 2.5h3.3l-7.2 8.3 8.5 11.2h-6.7l-5.2-6.8-6 6.8H1.6l7.7-8.8L1.2 2.5h6.8l4.7 6.2 5.5-6.2zm-1.2 17.5h1.8L7 4.4H5.1L17 20z"/>',
+  instagram:'<path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/>',
+  facebook:'<path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/>',
+  github:'<path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/>',
+  linkedin:'<path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1zM7.1 20.5H3.6V9h3.5v11.5z"/>',
+  mail:'<path d="M2 5h20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm10 7.200L3.500 7v.1L12 13l8.500-5.900V7L12 12.200z"/>'
+};
+
+document.title = PROFILE.title;
+document.getElementById("name").textContent = PROFILE.name;
+document.getElementById("bio").textContent = PROFILE.bio;
+
+const av = document.getElementById("avatar");
+av.src = PROFILE.avatar;
+av.onerror = () => {
+  av.onerror = null; av.classList.add("logo");
+  av.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="14" y="20" width="72" height="48" rx="6" fill="#2f6b66"/><rect x="20" y="26" width="60" height="36" rx="3" fill="#8ea3cf"/><path d="M30 52l12-12 10 9 8-6 10 9v6H30z" fill="#fff" opacity=".85"/><rect x="42" y="68" width="16" height="9" fill="#2f6b66"/><rect x="30" y="77" width="40" height="5" rx="2.500" fill="#2f6b66"/></svg>');
+};
+
+/* open / closed badge */
+(function(){
+  if(!HOURS) return;
+  const el = document.getElementById("status"), now = new Date();
+  const h = now.getHours() + now.getMinutes()/60;
+  const open = !HOURS.closedDays.includes(now.getDay()) && h >= HOURS.open && h < HOURS.close;
+  const t = x => { const hr = x % 12 || 12; return hr + (x < 12 || x === 24 ? " AM" : " PM"); };
+  el.hidden = false; el.classList.toggle("closed", !open);
+  el.querySelector("span").textContent = open ? "Open now · closes " + t(HOURS.close) : "Closed now · opens " + t(HOURS.open);
+})();
+
+/* service tags */
+const chipsEl = document.getElementById("chips");
+SERVICES.forEach((t, i) => {
+  const li = document.createElement("li");
+  li.textContent = t; li.style.animationDelay = (0.4 + i * 0.06) + "s";
+  chipsEl.appendChild(li);
+});
+
+/* link buttons */
+const linksEl = document.getElementById("links");
+LINKS.forEach((l, i) => {
+  const li = document.createElement("li");
+  const a = document.createElement("a");
+  a.className = "link" + (l.primary ? " primary" : ""); a.href = l.url;
+  if (!l.url.startsWith("tel:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+  a.style.animationDelay = (0.6 + i * 0.09) + "s";
+  a.innerHTML = '<i class="shine"></i>' + (l.icon && ICONS[l.icon] ? '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[l.icon] + '</svg>' : '') + '<span></span>';
+  a.querySelector("span").textContent = l.label;
+  a.addEventListener("pointerdown", e => {
+    const r = a.getBoundingClientRect(), s = Math.max(r.width, r.height);
+    const d = document.createElement("i");
+    d.className = "ripple";
+    d.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX - r.left - s/2}px;top:${e.clientY - r.top - s/2}px`;
+    a.appendChild(d); setTimeout(() => d.remove(), 650);
+  });
+  li.appendChild(a); linksEl.appendChild(li);
+});
+
+/* social icons */
+const socEl = document.getElementById("socials");
+SOCIALS.forEach((s, i) => {
+  const li = document.createElement("li");
+  li.style.animationDelay = (1.1 + i * 0.08) + "s";
+  li.innerHTML = `<a href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.icon}"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[s.icon] || ""}</svg></a>`;
+  socEl.appendChild(li);
+});
+
+/* subtle parallax on the background for pointer devices */
+if (matchMedia("(hover:hover)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+  const bg = document.querySelector(".bg");
+  addEventListener("pointermove", e => {
+    const x = (e.clientX / innerWidth - .5) * 24, y = (e.clientY / innerHeight - .5) * 24;
+    bg.style.transform = `translate(${x}px,${y}px) scale(1.06)`;
+  });
+  bg.style.transition = "transform .6s ease-out";
+}
+</script>
+</body>
+</html>
